@@ -1,0 +1,21 @@
+.stats-container {
+  text-align: center;
+}
+.stats-container .stat-widget {
+  width: 25%;
+  float: left;
+}
+.stats-container .stat-widget .stat-button {
+  margin-top: 1em;
+  margin: 2em 1em;
+  position: relative;
+}
+.stats-container .stat-widget .stat-button .title {
+  font-size: 2em;
+  font-weight: bold;
+  color: #999;
+}
+.stats-container .stat-widget .stat-button .detail {
+  font-size: 1.5em;
+  color: #555;
+}

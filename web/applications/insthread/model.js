@@ -1,0 +1,2 @@
+wdefine(function(){
+});

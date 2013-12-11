@@ -1,0 +1,1 @@
+requirejs(['css!../../applications/dashboard/theme']);
