@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/restapis"/>
+	<classpathentry kind="src" path="src/services"/>
+	<classpathentry kind="src" path="src/implements"/>
+	<classpathentry kind="src" path="src/resources"/>
+	<classpathentry kind="src" path="src/test"/>
+	<classpathentry kind="src" path="src/framework"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/httpclient-4.3.1.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/httpcore-4.3.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/tracerexport.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/derby.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/derbytools.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="net.juniper.wtf.library.container/Middleware_Library"/>
+	<classpathentry kind="con" path="net.juniper.wtf.library.container/Product_Common"/>
+	<classpathentry kind="con" path="net.juniper.wtf.library.container/ThdParty_Library"/>
+	<classpathentry kind="output" path="web/WEB-INF/classes"/>
+</classpath>
