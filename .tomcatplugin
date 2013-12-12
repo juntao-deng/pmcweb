@@ -5,7 +5,7 @@
 <reloadable>false</reloadable>
 <redirectLogger>false</redirectLogger>
 <updateXml>true</updateXml>
-<warLocation></warLocation>
+<warLocation>/home/juntaod/Dev/tomcat/webapps/monitor.war</warLocation>
 <extraInfo></extraInfo>
 <webPath>/monitor</webPath>
 </tomcatProjectProperties>
