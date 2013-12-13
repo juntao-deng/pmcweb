@@ -118,8 +118,10 @@ class HttpRequestThread implements Runnable{
 			byte[] results = HttpProxy.getInstance(serverInfo).request(ClientInfoServiceImpl.SERVICE_NAME, methodName, params, timeout);
 			if(results == null)
 				resultsMap.put(serverInfo, null);
-			objInput = new ObjectInputStream(new ByteArrayInputStream(results));
+			else{
+				objInput = new ObjectInputStream(new ByteArrayInputStream(results));
 				resultsMap.put(serverInfo, objInput.readObject());
+			}
 		} 
 		catch (Exception e) {
 			logger.error(e.getMessage(), e);

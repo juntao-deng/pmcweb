@@ -1,15 +1,4 @@
 wdefine(function(){
-	$app.component('autorefresh').on('valuechange', function() {
-		if(this.value()){
-			this.ctx.component('refreshinterval').editable(true);
-			startRefresh();
-		}
-		else{
-			this.ctx.component('refreshinterval').editable(false);
-			if(appGlobal.rt)
-				clearTimeout(appGlobal.rt);
-		}
-	});
 	
 	$app.component('operationmenu').on('click', function(options){
 		if(options.trigger.id == 'play'){

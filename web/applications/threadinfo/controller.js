@@ -1,5 +1,13 @@
 wdefine(function(){
 	var ctx = $app;
+	$app.on('closing', function(options){
+		if(cpuAndMemRt)
+			clearTimeout(cpuAndMemRt);
+		if(refreshRt)
+			clearTimeout(refreshRt);
+	});
+	
+	var refreshRt = null;
 	$app.component('autorefresh').on('valuechange', function() {
 		if(this.value()){
 			this.ctx.component('refreshinterval').editable(true);
@@ -7,8 +15,8 @@ wdefine(function(){
 		}
 		else{
 			this.ctx.component('refreshinterval').editable(false);
-			if(appGlobal.rt)
-				clearTimeout(appGlobal.rt);
+			if(refreshRt)
+				clearTimeout(refreshRt);
 		}
 	});
 	
@@ -53,7 +61,10 @@ wdefine(function(){
 	
 	var cpuAndMemRt = null;
 	function startCpuAndMem() {
-		var servers = ctx.component('serverinput').value();
+		var serverInput = ctx.component('serverinput');
+		if(serverInput == null)
+			return;
+		var servers = serverInput.value();
 		if(servers == null || servers.length == 0)
 			return;
 		var model = ctx.model('cpumodel');
@@ -64,18 +75,20 @@ wdefine(function(){
 		model.reqParam("ips", servers.join(","));
 		model.reload();
 		
-		cpuAndMemRt = setTimeout(startCpuAndMem, 3000);
+		cpuAndMemRt = setTimeout(startCpuAndMem, 5000);
 	}
 	
-	var appGlobal = {};
 	function startRefresh(){
-		var refreshable = $app.component('autorefresh').value();
+		var refreshInput = $app.component('autorefresh');
+		if(refreshInput == null)
+			return;
+		var refreshable = refreshInput.value();
 		if(!refreshable)
 			return;
 		var interval = $app.component('refreshinterval').value();
 		if(interval <= 0)
 			return;
-		appGlobal.rt = setTimeout(doRefreshWithRestart, interval * 1000);
+		refreshRt = setTimeout(doRefreshWithRestart, interval * 1000);
 	}
 	function doRefreshWithRestart() {
 		doRefresh();

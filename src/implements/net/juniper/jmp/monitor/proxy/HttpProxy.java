@@ -26,7 +26,9 @@ public class HttpProxy {
 	private Logger logger = Logger.getLogger(HttpProxy.class);
 	private static Map<String, HttpProxy> proxyMap = new HashMap<String, HttpProxy>();
 	private TargetServerInfo serverInfo;
+	private CloseableHttpClient httpclient;
 	private HttpProxy(TargetServerInfo info){
+		httpclient = HttpClients.createDefault();
 		this.serverInfo = info;
 	}
 	
@@ -35,7 +37,6 @@ public class HttpProxy {
 //	}
 	
 	public byte[] request(String serviceName, String method, Object[] params, int timeout) throws Exception {
-		CloseableHttpClient httpclient = HttpClients.createDefault();
 		String targetUrl = "http://" + serverInfo.getAddress() + ":" + serverInfo.getPort() + "/dispatcher";
 		HttpPost httpPost = new HttpPost(targetUrl);
 		if(timeout <= -1)
@@ -79,8 +80,6 @@ public class HttpProxy {
 		finally {
 			if(resp != null)
 				resp.close();
-			if(httpclient != null)
-				httpclient.close();
 		}
 		return null;
 	}
