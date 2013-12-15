@@ -1,8 +1,7 @@
 package net.juniper.space.services.threadinfo;
 
-import java.lang.management.ThreadInfo;
-import java.util.List;
+import net.juniper.jmp.monitor.info.dump.ThreadInfoDump;
 
 public interface ThreadInfoService {
-	public List<ThreadInfo> getThreadInfos();
+	public ThreadInfoDump[] getThreadInfos();
 }

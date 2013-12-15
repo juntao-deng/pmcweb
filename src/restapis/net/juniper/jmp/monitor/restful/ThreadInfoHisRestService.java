@@ -10,8 +10,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
 
 import net.juniper.jmp.core.repository.PageResult;
-import net.juniper.jmp.monitor.info.StageInfoBase;
-import net.juniper.jmp.monitor.info.ThreadInfo;
+import net.juniper.jmp.monitor.info.dump.StageInfoBaseDump;
+import net.juniper.jmp.monitor.info.dump.ThreadInfoDump;
 
 @Path("/threadinfoshis")
 public interface ThreadInfoHisRestService {
@@ -19,22 +19,22 @@ public interface ThreadInfoHisRestService {
 	@GET 
 	@Path("/") 
 	@Produces(MediaType.APPLICATION_JSON)
-	public PageResult<ThreadInfo> getThreadInfos(@QueryParam("startTs") String startTs, @QueryParam("endTs") String endTs);
+	public PageResult<ThreadInfoDump> getThreadInfos(@QueryParam("startTs") String startTs, @QueryParam("endTs") String endTs);
 	
 	@GET 
 	@Path("/{id}/stageinfos") 
 	@Produces(MediaType.APPLICATION_JSON)
-	public StageInfoBase[] getStageInfos(@PathParam("id") String id);
+	public StageInfoBaseDump[] getStageInfos(@PathParam("id") String id);
 	
 	@GET 
 	@Path("/{id}/stageinfos/{sid}") 
 	@Produces(MediaType.APPLICATION_JSON)
-	public StageInfoBase getStageInfo(@PathParam("id") String id, @PathParam("sid") String sid);
+	public StageInfoBaseDump getStageInfo(@PathParam("id") String id, @PathParam("sid") String sid);
 	
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ThreadInfo getThreadInfo(@PathParam("id") String id);
+	public ThreadInfoDump getThreadInfo(@PathParam("id") String id);
 	
 	@POST
 	@Path("/action/{actionseg}")

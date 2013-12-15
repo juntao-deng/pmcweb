@@ -1,6 +1,7 @@
 package net.juniper.jmp.monitor.restful.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -13,8 +14,8 @@ import javax.ws.rs.core.PathSegment;
 import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.core.locator.ServiceLocator;
 import net.juniper.jmp.core.repository.PageResult;
-import net.juniper.jmp.monitor.info.StageInfoBase;
-import net.juniper.jmp.monitor.info.ThreadInfo;
+import net.juniper.jmp.monitor.info.dump.StageInfoBaseDump;
+import net.juniper.jmp.monitor.info.dump.ThreadInfoDump;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.ThreadInfoRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
@@ -28,25 +29,25 @@ public class ThreadInfoRestServiceImpl implements ThreadInfoRestService {
 	private static final String THREADINFOS = "threadinfos";
 	private IClientInfoService service = ServiceLocator.getService(IClientInfoService.class);
 	@Override
-	public PageResult<ThreadInfo> getThreadInfos() {
+	public PageResult<ThreadInfoDump> getThreadInfos() {
 		String ipstr = ApiContext.getParameter("ips");
 		String[] ips = ipstr.split(",");
 		List<TargetServerInfo> servers = getServers(ips);
 		Map<TargetServerInfo, Object> reqResults = service.getThreadInfos(servers);
-		List<ThreadInfo> dr = new ArrayList<ThreadInfo>();
-		List<ThreadInfo> or = new ArrayList<ThreadInfo>();
+		List<ThreadInfoDump> dr = new ArrayList<ThreadInfoDump>();
+		List<ThreadInfoDump> or = new ArrayList<ThreadInfoDump>();
 		Iterator<Entry<TargetServerInfo, Object>> it = reqResults.entrySet().iterator();
 		while(it.hasNext()){
 			Entry<TargetServerInfo, Object> entry = it.next();
-			List<ThreadInfo> result = (List<ThreadInfo>) entry.getValue();
+			ThreadInfoDump[] result = (ThreadInfoDump[]) entry.getValue();
 			if(result != null){
-				or.addAll(result);
-				dr.addAll(detachResult(result));
+				or.addAll(Arrays.asList(result));
+				dr.addAll(detachResult(or));
 			}
 		}
-		Collections.sort(dr, new Comparator<ThreadInfo>(){
+		Collections.sort(dr, new Comparator<ThreadInfoDump>(){
 			@Override
-			public int compare(ThreadInfo o1, ThreadInfo o2) {
+			public int compare(ThreadInfoDump o1, ThreadInfoDump o2) {
 				if(o1.getDuration() > o2.getDuration())
 					return -1;
 				else if(o1.getDuration() < o2.getDuration())
@@ -55,15 +56,15 @@ public class ThreadInfoRestServiceImpl implements ThreadInfoRestService {
 			}
 		});
 		ApiContext.getGlobalSessionCache().addCache(THREADINFOS, or);
-		return new PageResult<ThreadInfo>(dr);
+		return new PageResult<ThreadInfoDump>(dr);
 	}
 
-	private List<ThreadInfo> detachResult(List<ThreadInfo> result) {
-		List<ThreadInfo> infoList = new ArrayList<ThreadInfo>();
-		Iterator<ThreadInfo> it = result.iterator();
+	private List<ThreadInfoDump> detachResult(List<ThreadInfoDump> result) {
+		List<ThreadInfoDump> infoList = new ArrayList<ThreadInfoDump>();
+		Iterator<ThreadInfoDump> it = result.iterator();
 		while(it.hasNext()){
-			ThreadInfo ti = it.next();
-			ThreadInfo dti = (ThreadInfo) ti.detach();
+			ThreadInfoDump ti = it.next();
+			ThreadInfoDump dti = (ThreadInfoDump) ti.detach();
 			infoList.add(dti);
 		}
 		return infoList;
@@ -81,13 +82,13 @@ public class ThreadInfoRestServiceImpl implements ThreadInfoRestService {
 	}
 	
 	@Override
-	public ThreadInfo getThreadInfo(String id) {
-		List<ThreadInfo> dr = (List<ThreadInfo>) ApiContext.getGlobalSessionCache().getCache(THREADINFOS);
+	public ThreadInfoDump getThreadInfo(String id) {
+		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) ApiContext.getGlobalSessionCache().getCache(THREADINFOS);
 		if(dr == null)
 			return null;
-		Iterator<ThreadInfo> it = dr.iterator();
+		Iterator<ThreadInfoDump> it = dr.iterator();
 		while(it.hasNext()){
-			ThreadInfo t = it.next();
+			ThreadInfoDump t = it.next();
 			if(t.getCallId().equals(id)){
 				return t;
 			}
@@ -101,28 +102,28 @@ public class ThreadInfoRestServiceImpl implements ThreadInfoRestService {
 	}
 
 	@Override
-	public StageInfoBase[] getStageInfos(String id) {
-		List<ThreadInfo> dr = (List<ThreadInfo>) ApiContext.getGlobalSessionCache().getCache(THREADINFOS);
+	public StageInfoBaseDump[] getStageInfos(String id) {
+		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) ApiContext.getGlobalSessionCache().getCache(THREADINFOS);
 		if(dr == null)
 			return null;
-		StageInfoBase[] result = doGetChildrenStages(dr, id);
+		StageInfoBaseDump[] result = doGetChildrenStages(dr.toArray(new ThreadInfoDump[0]), id);
 		return result;
 	}
 	
-	private StageInfoBase[] doGetChildrenStages(List<? extends StageInfoBase> stages, String id){
-		Iterator<? extends StageInfoBase> it = stages.iterator();
-		while(it.hasNext()){
-			StageInfoBase t = it.next();
-			if(t.getCallId().equals(id)){
-				List<StageInfoBase> slist = t.getChildrenStageList();
-				return slist == null ? new StageInfoBase[0] : slist.toArray(new StageInfoBase[0]);
-			}
-			else{
-				List<StageInfoBase> slist = t.getChildrenStageList();
-				if(slist != null){
-					StageInfoBase[] result = doGetChildrenStages(slist, id);
-					if(result != null)
-						return result;
+	private StageInfoBaseDump[] doGetChildrenStages(StageInfoBaseDump[] stages, String id){
+		if(stages != null){
+			for(int i = 0; i < stages.length; i ++){
+				StageInfoBaseDump t = stages[i];
+				if(t.getCallId().equals(id)){
+					return t.getChildrenStages();
+				}
+				else{
+					StageInfoBaseDump[] slist = t.getChildrenStages();
+					if(slist != null){
+						StageInfoBaseDump[] result = doGetChildrenStages(slist, id);
+						if(result != null)
+							return result;
+					}
 				}
 			}
 		}
@@ -130,16 +131,16 @@ public class ThreadInfoRestServiceImpl implements ThreadInfoRestService {
 	}
 
 	@Override
-	public StageInfoBase getStageInfo(String id, String sid) {
-		List<ThreadInfo> dr = (List<ThreadInfo>) ApiContext.getGlobalSessionCache().getCache(THREADINFOS);
+	public StageInfoBaseDump getStageInfo(String id, String sid) {
+		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) ApiContext.getGlobalSessionCache().getCache(THREADINFOS);
 		if(dr == null)
 			return null;
-		Iterator<ThreadInfo> it = dr.iterator();
+		Iterator<ThreadInfoDump> it = dr.iterator();
 		while(it.hasNext()){
-			StageInfoBase stage = it.next();
-			List<StageInfoBase> slist = stage.getChildrenStageList();
+			ThreadInfoDump thread = it.next();
+			StageInfoBaseDump[] slist = thread.getChildrenStages();
 			if(slist != null){
-				StageInfoBase result = doGetChildrenStage(slist, sid);
+				StageInfoBaseDump result = doGetChildrenStage(slist, sid);
 				if(result != null)
 					return result;
 			}
@@ -147,15 +148,14 @@ public class ThreadInfoRestServiceImpl implements ThreadInfoRestService {
 		return null;
 	}
 
-	private StageInfoBase doGetChildrenStage(List<StageInfoBase> slist, String sid) {
-		Iterator<StageInfoBase> it = slist.iterator();
-		while(it.hasNext()){
-			StageInfoBase s = it.next();
+	private StageInfoBaseDump doGetChildrenStage(StageInfoBaseDump[] slist, String sid) {
+		for(int i = 0; i < slist.length; i ++){
+			StageInfoBaseDump s = slist[i];
 			if(s.getCallId().equals(sid))
 				return s;
-			List<StageInfoBase> clist = s.getChildrenStageList();
+			StageInfoBaseDump[] clist = s.getChildrenStages();
 			if(clist != null){
-				StageInfoBase result = doGetChildrenStage(clist, sid);
+				StageInfoBaseDump result = doGetChildrenStage(clist, sid);
 				if(result != null)
 					return result;
 			}
