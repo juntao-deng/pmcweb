@@ -2,8 +2,6 @@ package net.juniper.jmp.monitor.restful.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +15,7 @@ import net.juniper.jmp.core.repository.PageResult;
 import net.juniper.jmp.monitor.info.dump.StageInfoBaseDump;
 import net.juniper.jmp.monitor.info.dump.ThreadInfoDump;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
-import net.juniper.jmp.monitor.restful.ThreadInfoRestService;
+import net.juniper.jmp.monitor.restful.ThreadInfoHisRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.monitor.sys.MonitorInfo;
 /**
@@ -25,15 +23,17 @@ import net.juniper.jmp.monitor.sys.MonitorInfo;
  * @author juntaod
  *
  */
-public class ThreadInfoHisRestServiceImpl implements ThreadInfoRestService {
-	private static final String THREADINFOS = "threadinfos";
+public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
+	private static final String THREADHISINFOS = "threadhisinfos";
 	private IClientInfoService service = ServiceLocator.getService(IClientInfoService.class);
 	@Override
-	public PageResult<ThreadInfoDump> getThreadInfos() {
+	public PageResult<ThreadInfoDump> getThreadInfos(String startTs, String endTs) {
 		String ipstr = ApiContext.getParameter("ips");
 		String[] ips = ipstr.split(",");
 		List<TargetServerInfo> servers = getServers(ips);
-		Map<TargetServerInfo, Object> reqResults = service.getThreadInfos(servers);
+//		String startTs = ApiContext.getParameter("startts");
+//		String endTs = ApiContext.getParameter("endts");
+		Map<TargetServerInfo, Object> reqResults = service.getPeriodThreadInfos(servers, startTs, endTs);
 		List<ThreadInfoDump> dr = new ArrayList<ThreadInfoDump>();
 		List<ThreadInfoDump> or = new ArrayList<ThreadInfoDump>();
 		Iterator<Entry<TargetServerInfo, Object>> it = reqResults.entrySet().iterator();
@@ -45,17 +45,17 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoRestService {
 				dr.addAll(detachResult(or));
 			}
 		}
-		Collections.sort(dr, new Comparator<ThreadInfoDump>(){
-			@Override
-			public int compare(ThreadInfoDump o1, ThreadInfoDump o2) {
-				if(o1.getDuration() > o2.getDuration())
-					return -1;
-				else if(o1.getDuration() < o2.getDuration())
-					return 1;
-				return 0;
-			}
-		});
-		ApiContext.getGlobalSessionCache().addCache(THREADINFOS, or);
+//		Collections.sort(dr, new Comparator<ThreadInfoDump>(){
+//			@Override
+//			public int compare(ThreadInfoDump o1, ThreadInfoDump o2) {
+//				if(o1.getDuration() > o2.getDuration())
+//					return -1;
+//				else if(o1.getDuration() < o2.getDuration())
+//					return 1;
+//				return 0;
+//			}
+//		});
+		ApiContext.getGlobalSessionCache().addCache(THREADHISINFOS, or);
 		return new PageResult<ThreadInfoDump>(dr);
 	}
 
@@ -83,7 +83,7 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoRestService {
 	
 	@Override
 	public ThreadInfoDump getThreadInfo(String id) {
-		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) ApiContext.getGlobalSessionCache().getCache(THREADINFOS);
+		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) ApiContext.getGlobalSessionCache().getCache(THREADHISINFOS);
 		if(dr == null)
 			return null;
 		Iterator<ThreadInfoDump> it = dr.iterator();
@@ -103,7 +103,7 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoRestService {
 
 	@Override
 	public StageInfoBaseDump[] getStageInfos(String id) {
-		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) ApiContext.getGlobalSessionCache().getCache(THREADINFOS);
+		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) ApiContext.getGlobalSessionCache().getCache(THREADHISINFOS);
 		if(dr == null)
 			return null;
 		StageInfoBaseDump[] result = doGetChildrenStages(dr.toArray(new ThreadInfoDump[0]), id);
@@ -132,7 +132,7 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoRestService {
 
 	@Override
 	public StageInfoBaseDump getStageInfo(String id, String sid) {
-		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) ApiContext.getGlobalSessionCache().getCache(THREADINFOS);
+		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) ApiContext.getGlobalSessionCache().getCache(THREADHISINFOS);
 		if(dr == null)
 			return null;
 		Iterator<ThreadInfoDump> it = dr.iterator();

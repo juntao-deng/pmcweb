@@ -1,6 +1,7 @@
 package net.juniper.jmp.monitor.proxy;
 
 import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class HttpProxy {
 //		return doRequest(serviceName, method, params, -1);
 //	}
 	
-	public byte[] request(String serviceName, String method, Object[] params, int timeout) throws Exception {
+	public Object request(String serviceName, String method, Object[] params, int timeout) throws Exception {
 		String targetUrl = "http://" + serverInfo.getAddress() + ":" + serverInfo.getPort() + "/dispatcher";
 		HttpPost httpPost = new HttpPost(targetUrl);
 		if(timeout <= -1)
@@ -58,12 +59,12 @@ public class HttpProxy {
 		    if(length <= 0)
 		    	return null;
 		    
-		    byte[] respBytes = new byte[length];
-		    entity.getContent().read(respBytes, 0, length);
+		    ObjectInputStream oin = new ObjectInputStream(entity.getContent());
+		    Object result = oin.readObject();
 		    // do something useful with the response body
 		    // and ensure it is fully consumed
 		    EntityUtils.consume(entity);
-		    return respBytes;
+		    return result;
 		}
 		catch(ConnectTimeoutException e){
 			logger.error("Connect timeout for url:" + targetUrl);

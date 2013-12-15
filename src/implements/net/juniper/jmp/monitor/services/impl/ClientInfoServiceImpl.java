@@ -1,6 +1,5 @@
 package net.juniper.jmp.monitor.services.impl;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class ClientInfoServiceImpl implements IClientInfoService{
 	public Map<TargetServerInfo, Object> getThreadInfos(List<TargetServerInfo> servers){
 		return callService(servers, "getThreadInfos", null);
 	}
-
+	
 	private Map<TargetServerInfo, Object> callService(List<TargetServerInfo> servers, String methodName, Object[] params){
 		return callService(servers, methodName, params, -1);
 	}
@@ -68,7 +67,7 @@ public class ClientInfoServiceImpl implements IClientInfoService{
 	}
 
 	@Override
-	public Map<TargetServerInfo, Object> getThreadInfos(List<TargetServerInfo> servers, String startTime, String endTime) {
+	public Map<TargetServerInfo, Object> getPeriodThreadInfos(List<TargetServerInfo> servers, String startTime, String endTime) {
 		return callService(servers, "getPeriodThreadInfos", new Object[]{startTime, endTime});
 	}
 
@@ -83,7 +82,7 @@ public class ClientInfoServiceImpl implements IClientInfoService{
 	@Override
 	public boolean isServerLive(TargetServerInfo server) {
 		try {
-			byte[] results = HttpProxy.getInstance(server).request(SERVICE_NAME, "getServerState", null, 10000);
+			Object results = HttpProxy.getInstance(server).request(SERVICE_NAME, "getServerState", null, 10000);
 			if(results == null)
 				return false;
 			return true;
@@ -115,14 +114,8 @@ class HttpRequestThread implements Runnable{
 	public void run() {
 		ObjectInputStream objInput = null;
 		try {
-			byte[] results = HttpProxy.getInstance(serverInfo).request(ClientInfoServiceImpl.SERVICE_NAME, methodName, params, timeout);
-			if(results == null)
-				resultsMap.put(serverInfo, null);
-			else{
-				System.out.println("----------------------client get size:" + results.length);
-				objInput = new ObjectInputStream(new ByteArrayInputStream(results));
-				resultsMap.put(serverInfo, objInput.readObject());
-			}
+			Object result = HttpProxy.getInstance(serverInfo).request(ClientInfoServiceImpl.SERVICE_NAME, methodName, params, timeout);
+			resultsMap.put(serverInfo, result);
 		} 
 		catch (Exception e) {
 			logger.error(e.getMessage(), e);

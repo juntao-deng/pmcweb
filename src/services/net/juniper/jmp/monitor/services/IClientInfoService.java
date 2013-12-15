@@ -13,7 +13,7 @@ public interface IClientInfoService {
 	public Map<TargetServerInfo, Object> getThreadInfos(List<TargetServerInfo> servers);
 	public Map<TargetServerInfo, Object> getCpuInfo(List<TargetServerInfo> servers);
 	public Map<TargetServerInfo, Object> getMemInfo(List<TargetServerInfo> servers);
-	public Map<TargetServerInfo, Object> getThreadInfos(List<TargetServerInfo> servers, String startTime, String endTime);
+	public Map<TargetServerInfo, Object> getPeriodThreadInfos(List<TargetServerInfo> servers, String startTime, String endTime);
 	public boolean isNodeLive(TargetServerInfo server);
 	public boolean isServerLive(TargetServerInfo server);
 }
