@@ -119,6 +119,7 @@ class HttpRequestThread implements Runnable{
 			if(results == null)
 				resultsMap.put(serverInfo, null);
 			else{
+				System.out.println("----------------------client get size:" + results.length);
 				objInput = new ObjectInputStream(new ByteArrayInputStream(results));
 				resultsMap.put(serverInfo, objInput.readObject());
 			}
