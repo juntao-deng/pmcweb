@@ -27,6 +27,7 @@ public class NodeStateThread implements Runnable {
 				while(it.hasNext()){
 					TargetServerInfo server = it.next();
 					boolean nodeAlive = clientInfoService.isNodeLive(server);
+					logger.info("node live:" + nodeAlive + ", ip:" + server.getAddress());
 					server.setNodeAlive(nodeAlive);
 				}
 			}

@@ -1,10 +1,10 @@
 package net.juniper.jmp.monitor.services.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.juniper.jmp.core.ctx.PagingContext;
 import net.juniper.jmp.monitor.dao.ServerRepository;
@@ -35,7 +35,7 @@ public class ServerInfoServiceImpl implements IServerInfoService {
 	public Map<String, TargetServerInfo> getAllServers() {
 		Map<String, TargetServerInfo> allServers = MonitorInfo.getInstance().getAllServers();
 		if(allServers == null){
-			allServers = new HashMap<String, TargetServerInfo>();
+			allServers = new ConcurrentHashMap<String, TargetServerInfo>();
 			Specification<ServerEntity> spec = null;
 			Pageable pageable = null;
 			Page<ServerEntity> results = serverRep.findAll(spec, pageable);

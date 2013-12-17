@@ -2,6 +2,7 @@ package net.juniper.jmp.monitor.services.impl;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.NoRouteToHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -87,6 +88,10 @@ public class ClientInfoServiceImpl implements IClientInfoService{
 				return false;
 			return true;
 		} 
+		catch (NoRouteToHostException e){
+			logger.error("can not connect to server:" + server.getAddress());
+			return false;
+		}
 		catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			return false;
@@ -115,6 +120,7 @@ class HttpRequestThread implements Runnable{
 		ObjectInputStream objInput = null;
 		try {
 			Object result = HttpProxy.getInstance(serverInfo).request(ClientInfoServiceImpl.SERVICE_NAME, methodName, params, timeout);
+			logger.info("got message for method:" + methodName);
 			resultsMap.put(serverInfo, result);
 		} 
 		catch (Exception e) {

@@ -3,6 +3,7 @@ package net.juniper.jmp.monitor.proxy;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.NoRouteToHostException;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,6 +66,9 @@ public class HttpProxy {
 		    // and ensure it is fully consumed
 		    EntityUtils.consume(entity);
 		    return result;
+		}
+		catch(NoRouteToHostException e){
+			logger.error("Connect timeout for url:" + targetUrl);
 		}
 		catch(ConnectTimeoutException e){
 			logger.error("Connect timeout for url:" + targetUrl);
