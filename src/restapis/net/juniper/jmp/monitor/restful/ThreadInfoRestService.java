@@ -9,8 +9,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
 
 import net.juniper.jmp.core.repository.PageResult;
-import net.juniper.jmp.monitor.info.dump.StageInfoBaseDump;
-import net.juniper.jmp.monitor.info.dump.ThreadInfoDump;
+import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
+import net.juniper.jmp.tracer.dumper.info.ThreadInfoDump;
 
 @Path("/threadinfos")
 public interface ThreadInfoRestService {

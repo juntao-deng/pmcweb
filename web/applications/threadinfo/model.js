@@ -22,8 +22,8 @@ wdefine(function(){
 	                                  {name: 'stageMethod', text:'Req Method', width:60},
 	                                  //{name: 'requestBytes', text:'Up Bytes', width:40, align:"right", formatter:"int"},
 	                                  //{name: 'responseBytes', text:'Down Bytes', width:40, align:"right", formatter:"int"},
-	                                  {name: 'stages', text:'Stages', width:40, align:"right"},        
-	                                  {name: 'sqls', text:'Sqls', width:40, align:"right"},
+	                                  {name: 'sumStageCount', text:'Sum Stages', width:40, align:"right"},        
+	                                  {name: 'sumSqlCount', text:'Sum Sqls', width:40, align:"right"},
 	                                  {name: 'conns', text:'Db Conns', width:40, align:"right"}
 	                          	]
 						}

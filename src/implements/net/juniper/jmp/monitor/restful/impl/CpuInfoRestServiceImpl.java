@@ -11,12 +11,12 @@ import javax.ws.rs.core.MultivaluedMap;
 import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.core.locator.ServiceLocator;
 import net.juniper.jmp.core.repository.PageResult;
-import net.juniper.jmp.monitor.info.CpuInfo;
 import net.juniper.jmp.monitor.mo.info.CpuSummary;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.CpuInfoRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.monitor.sys.MonitorInfo;
+import net.juniper.jmp.tracer.info.CpuInfo;
 
 public class CpuInfoRestServiceImpl implements CpuInfoRestService {
 	private IClientInfoService service = ServiceLocator.getService(IClientInfoService.class);

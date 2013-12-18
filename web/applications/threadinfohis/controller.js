@@ -18,7 +18,7 @@ wdefine(function(){
 	});
 	
 	$app.component('threadgrid').on('dblclick', function(options){
-		AppUtil.navigateToDialog("monitor/threadsummary", {navId: options.rowId}, {title: "Thread Summary", width: "800", height: "500"});
+		AppUtil.navigateToDialog("monitor/threadsummary", {itemId: options.rowId, urlBase: 'threadinfoshis'}, {title: "Thread Summary", width: "800", height: "500"});
 	});
 	
 	function doFetch() {

@@ -10,12 +10,12 @@ import javax.ws.rs.core.MultivaluedMap;
 import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.core.locator.ServiceLocator;
 import net.juniper.jmp.core.repository.PageResult;
-import net.juniper.jmp.monitor.info.MemInfo;
 import net.juniper.jmp.monitor.mo.info.MemSummary;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.MemInfoRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.monitor.sys.MonitorInfo;
+import net.juniper.jmp.tracer.info.MemInfo;
 
 public class MemInfoRestServiceImpl implements MemInfoRestService {
 	private IClientInfoService service = ServiceLocator.getService(IClientInfoService.class);

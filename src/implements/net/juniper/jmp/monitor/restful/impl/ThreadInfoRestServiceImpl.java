@@ -14,12 +14,12 @@ import javax.ws.rs.core.PathSegment;
 import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.core.locator.ServiceLocator;
 import net.juniper.jmp.core.repository.PageResult;
-import net.juniper.jmp.monitor.info.dump.StageInfoBaseDump;
-import net.juniper.jmp.monitor.info.dump.ThreadInfoDump;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.ThreadInfoRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.monitor.sys.MonitorInfo;
+import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
+import net.juniper.jmp.tracer.dumper.info.ThreadInfoDump;
 /**
  * 
  * @author juntaod
@@ -115,12 +115,13 @@ public class ThreadInfoRestServiceImpl implements ThreadInfoRestService {
 			for(int i = 0; i < stages.length; i ++){
 				StageInfoBaseDump t = stages[i];
 				if(t.getCallId().equals(id)){
-					return t.getChildrenStages();
+					List<StageInfoBaseDump> slist = t.getChildrenStages();
+					return slist == null ? null : slist.toArray(new StageInfoBaseDump[0]);
 				}
 				else{
-					StageInfoBaseDump[] slist = t.getChildrenStages();
+					List<StageInfoBaseDump> slist = t.getChildrenStages();
 					if(slist != null){
-						StageInfoBaseDump[] result = doGetChildrenStages(slist, id);
+						StageInfoBaseDump[] result = doGetChildrenStages(slist.toArray(new StageInfoBaseDump[0]), id);
 						if(result != null)
 							return result;
 					}
@@ -138,9 +139,9 @@ public class ThreadInfoRestServiceImpl implements ThreadInfoRestService {
 		Iterator<ThreadInfoDump> it = dr.iterator();
 		while(it.hasNext()){
 			ThreadInfoDump thread = it.next();
-			StageInfoBaseDump[] slist = thread.getChildrenStages();
+			List<StageInfoBaseDump> slist = thread.getChildrenStages();
 			if(slist != null){
-				StageInfoBaseDump result = doGetChildrenStage(slist, sid);
+				StageInfoBaseDump result = doGetChildrenStage(slist.toArray(new StageInfoBaseDump[0]), sid);
 				if(result != null)
 					return result;
 			}
@@ -153,9 +154,9 @@ public class ThreadInfoRestServiceImpl implements ThreadInfoRestService {
 			StageInfoBaseDump s = slist[i];
 			if(s.getCallId().equals(sid))
 				return s;
-			StageInfoBaseDump[] clist = s.getChildrenStages();
+			List<StageInfoBaseDump> clist = s.getChildrenStages();
 			if(clist != null){
-				StageInfoBaseDump result = doGetChildrenStage(clist, sid);
+				StageInfoBaseDump result = doGetChildrenStage(clist.toArray(new StageInfoBaseDump[0]), sid);
 				if(result != null)
 					return result;
 			}

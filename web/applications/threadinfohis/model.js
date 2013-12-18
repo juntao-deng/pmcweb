@@ -11,7 +11,7 @@ wdefine(function(){
 	                               });
 	$app.metadata('detailstab', {items: [{id: 'item1', text: 'Method Stack'}, {id: 'item2', text: 'Sql Information'}]});
 	$app.model('threadmodel', {url: 'threadinfoshis', lazyInit: true, idAttribute: 'callId'});
-	$app.metadata('threadgrid', {model: 'threadmodel', height:230, pagination: null,
+	$app.metadata('threadgrid', {model: 'threadmodel', height:230,
 						columns:[
 	                                  {name: 'callId', text:'Id', width:80},
 	                                  {name: 'duration', text:'Duration', width:40},
@@ -22,8 +22,8 @@ wdefine(function(){
 	                                  {name: 'stageMethod', text:'Req Method', width:60},
 	                                  //{name: 'requestBytes', text:'Up Bytes', width:40, align:"right", formatter:"int"},
 	                                  //{name: 'responseBytes', text:'Down Bytes', width:40, align:"right", formatter:"int"},
-	                                  {name: 'stages', text:'Stages', width:40, align:"right"},        
-	                                  {name: 'sqls', text:'Sqls', width:40, align:"right"},
+	                                  {name: 'sumStageCount', text:'Stages', width:40, align:"right"},        
+	                                  {name: 'sumSqlCount', text:'Sqls', width:40, align:"right"},
 	                                  {name: 'conns', text:'Db Conns', width:40, align:"right"}
 	                          	]
 						}
