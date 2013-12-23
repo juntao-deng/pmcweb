@@ -1,5 +1,4 @@
 wdefine(function(){
-	$app.stateManager().connectState([$app.model('threadmodel')], [$app.component('operationmenu')]);
 	var ctx = $app;
 	$app.component('operationmenu').on('click', function(options){
 		if(options.trigger.id == 'fetch'){
@@ -41,7 +40,7 @@ wdefine(function(){
 	}
 	
 	$app.on('loaded', function(){
-		this.component('startts').value(new Date().format("MM/dd/yyyy hh:mm"));
+		this.component('startts').value(new Date().format("MM/dd/yyyy 00:00"));
 	});
 	
 	RestApi.action({

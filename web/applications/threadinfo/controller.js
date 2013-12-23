@@ -1,4 +1,5 @@
 wdefine(function(){
+	$app.stateManager().connectState([$app.model('threadmodel')], [$app.component('operationmenu')]);
 	var ctx = $app;
 	$app.on('closing', function(options){
 		if(cpuAndMemRt)
@@ -34,7 +35,7 @@ wdefine(function(){
 		}
 		else if(options.trigger.id == "stages"){
 			var row = this.ctx.model('threadmodel').select().rows[0];
-			AppUtil.navigateToStack("monitor/stageinfo", {navId: row.id}, {title: "Stage Information"});
+			AppUtil.navigateToStack("monitor/stageinfo", {navId: row.id, urlBase: 'threadinfos'}, {title: "Stage Information"});
 		}
 	});
 	
@@ -113,8 +114,8 @@ wdefine(function(){
 			if(data != null){
 				for(var i = 0; i < data.length; i ++){
 					var option = {value: data[i].address, text: data[i].address};
+					options.push(option);
 				}
-				options.push(option);
 			}
 			$app.component('serverinput').datas(options);
 			if(options.length > 0){

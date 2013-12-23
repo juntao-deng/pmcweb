@@ -13,13 +13,13 @@ import net.juniper.jmp.core.repository.PageResult;
 import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 import net.juniper.jmp.tracer.dumper.info.ThreadInfoDump;
 
-@Path("/threadinfoshis")
-public interface ThreadInfoHisRestService {
+@Path("/threadinfosaction")
+public interface ThreadInfoActionRestService {
 	
 	@GET 
 	@Path("/") 
 	@Produces(MediaType.APPLICATION_JSON)
-	public PageResult<ThreadInfoDump> getThreadInfos(@QueryParam("startTs") String startTs, @QueryParam("endTs") String endTs);
+	public PageResult<ThreadInfoDump> getThreadInfos(@QueryParam("recordId") String recordId);
 	
 	@GET 
 	@Path("/{id}/stageinfos") 

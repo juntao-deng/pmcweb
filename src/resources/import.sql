@@ -8,11 +8,9 @@ INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('1.010','010','Moni
 INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('1.020','010','Instant Threads','Y','monitor/threadinfo');
 INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('1.030','010','History Threads','Y','monitor/threadinfohis');
 INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('1.040','010','Action Recording','Y','monitor/actionrecord');
-INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.010','020','Thread duration list ','Y','monitor/listthread');
-INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.020','020','Thread db conns list','Y','monitor/listdbconn');
-INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.030','020','Thread sql count list','Y','monitor/listsqlcount');
-INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.040','020','Thread sql duration list','Y','monitor/listsqlduration');
-INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.110','020','Stage duration list ','Y','monitor/stagelistthread');
-INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.120','020','Stage db conns list','Y','monitor/stagelistdbconn');
-INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.130','020','Stage sql count list','Y','monitor/stagelistsqlcount');
-INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.140','020','Stage sql duration list','Y','monitor/stagelistsqlduration');
+INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.010','020','Thread duration list ','Y','monitor/tduration');
+INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.020','020','Thread db conns list','Y','monitor/tdbconns');
+INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.030','020','Thread sql count list','Y','monitor/tsqlcount');
+INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.040','020','Thread stage count list','Y','monitor/tstagescount');
+INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.110','020','Sql duration list ','Y','monitor/sqlduration');
+INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.120','020','Sql result count list','Y','monitor/sqlresultcount');

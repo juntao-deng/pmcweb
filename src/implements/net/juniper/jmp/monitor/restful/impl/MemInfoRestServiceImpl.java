@@ -35,8 +35,14 @@ public class MemInfoRestServiceImpl implements MemInfoRestService {
 			return null;
 		Map<TargetServerInfo, Object> reqResults = service.getMemInfo(servers);
 		MemInfo memInfo = (MemInfo) reqResults.get(servers.get(0));
+		MemSummary maxList = cacheList.get(0);
+		MemSummary totalList = cacheList.get(1);
+		MemSummary usedList = cacheList.get(2);
 		if(memInfo == null){
 			memInfo = new MemInfo();
+			memInfo.setMax(maxList.getValues().get(maxList.getValues().size() - 1));
+			memInfo.setTotal(totalList.getValues().get(totalList.getValues().size() - 1));
+			memInfo.setFree(memInfo.getTotal() - usedList.getValues().get(usedList.getValues().size() - 1));
 		}
 		//max
 		cacheList.get(0).queue(memInfo.getMax());

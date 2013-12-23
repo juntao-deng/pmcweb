@@ -68,8 +68,8 @@ public class ClientInfoServiceImpl implements IClientInfoService{
 	}
 
 	@Override
-	public Map<TargetServerInfo, Object> getPeriodThreadInfos(List<TargetServerInfo> servers, String startTime, String endTime) {
-		return callService(servers, "getPeriodThreadInfos", new Object[]{startTime, endTime});
+	public Map<TargetServerInfo, Object> getPeriodThreadInfos(List<TargetServerInfo> servers, String startTime, String endTime, String whereClause) {
+		return callService(servers, "getPeriodThreadInfos", new Object[]{startTime, endTime, whereClause});
 	}
 
 	@Override
@@ -96,6 +96,22 @@ public class ClientInfoServiceImpl implements IClientInfoService{
 			logger.error(e.getMessage(), e);
 			return false;
 		}
+	}
+
+	@Override
+	public Map<TargetServerInfo, Object> startRecord(List<TargetServerInfo> servers, String recordId) {
+		return callService(servers, "startRecord", new String[]{recordId}, 10000);
+	}
+
+	@Override
+	public void endRecord(List<TargetServerInfo> servers, String recordId) {
+		callService(servers, "endRecord", new String[]{recordId}, 10000);
+//		return (ThreadInfoDump[]) results.get(server);
+	}
+
+	@Override
+	public Map<TargetServerInfo, Object> getRecordThreadInfos(List<TargetServerInfo> servers, String recordId) {
+		return callService(servers, "getRecordResult", new String[]{recordId}, 10000);
 	}
 }
 

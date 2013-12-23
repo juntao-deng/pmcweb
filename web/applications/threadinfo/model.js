@@ -3,8 +3,8 @@ wdefine(function(){
 	$app.metadata('refreshinterval', {label: '&nbsp;&nbsp;Every:', labelWidth: '40', hint: 'Sec(s)', width: 20, defaultValue: 10, editable: false});
 	$app.metadata('operationmenu', {groups: [
 	                                         {menus : [{id:'refresh', icon:'icon-refresh', name: 'Refresh'}, 
-	                                                   {id:'export', icon: 'icon-download', name: 'Export'},
-	                                                   {id:'stages', icon: 'icon-edit', name: 'Stages'}
+	                                                   {id:'export', icon: 'icon-download', name: 'Export', statemgr: FwBase.Wtf.View.M_StateMgr},
+	                                                   {id:'stages', icon: 'icon-edit', name: 'Stages', statemgr: FwBase.Wtf.View.S_StateMgr}
 	                                         		  ]
 	                                         }
 	                                        ]

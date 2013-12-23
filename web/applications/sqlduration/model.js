@@ -1,10 +1,9 @@
 wdefine(function(){
 	$app.metadata('startts', {label: 'Time From', labelWidth: '80', hint: '', width: 100});
-	$app.metadata('endts', {label: '  To', labelWidth: '16', hint: '', width: 100});
 	$app.metadata('operationmenu', {groups: [
 	                                         {menus : [{id:'fetch', icon:'icon-refresh', name: 'Fetch'}, 
-	                                                   {id:'export', icon: 'icon-download', name: 'Export', statemgr: FwBase.Wtf.View.M_StateMgr},
-	                                                   {id:'stages', icon: 'icon-edit', name: 'Stages', statemgr: FwBase.Wtf.View.S_StateMgr}
+	                                                   {id:'export', icon: 'icon-download', name: 'Export'},
+	                                                   {id:'stages', icon: 'icon-edit', name: 'Stages'}
 	                                         		  ]
 	                                         }
 	                                        ]
@@ -30,5 +29,5 @@ wdefine(function(){
 				);
 	$app.metadata('methodForm', {model: 'threadmodel', rows: 1, elements:[{name:'methodStack.method', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
 	$app.metadata('sqlsForm', {model: 'threadmodel', rows: 1, elements:[{name:'detachedSql', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
-	$app.metadata("serverinput", {label: "Active Nodes:", labelWidth:'90', multiple: true, width: 300});
+	$app.metadata("serverinput", {label: "Active Node:", labelWidth:'90', multiple: false, width: 200});
 });

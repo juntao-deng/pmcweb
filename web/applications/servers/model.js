@@ -1,6 +1,7 @@
 wdefine(function(){
 	$app.model('center_model', {url: 'serverinfos'});
-	$app.metadata('center_grid', {model: 'center_model', height:330,
+	$app.metadata('center_grid', {model: 'center_model', height:430,
+		pagination: {rowNum : 30, rowList: [10, 15, 30]},
 		columns:[
                       {name: 'address', text:'Address', width:80},
                       {name: 'port', text:'Port', width:40},

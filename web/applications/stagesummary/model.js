@@ -1,6 +1,7 @@
 wdefine(function(){
 	$app.metadata("viewstageslink", {text: 'View Stages', style: 'link'});
-	$app.model("threadmodel", {url: 'threadinfos/' + $app.reqData('navId') + '/stageinfos/' + $app.reqData('itemId'), autoSelect: true});
+	var restBase = $app.reqData("urlBase");
+	$app.model("threadmodel", {url: restBase + '/' + $app.reqData('navId') + '/stageinfos/' + $app.reqData('itemId'), autoSelect: true});
 	$app.metadata('summaryform', {editable: false, model: 'threadmodel', elements: [{name: 'callId', label: 'Id:', nextrow : false, rowSpan : 1, editorType:'input'},
 	                                         {name: 'duration', label: 'Duration:', nextrow : false, rowSpan : 1, editorType:'input'},
 	                                         {name: 'stageName', label: 'Name:', nextrow : false, rowSpan : 1, editorType:'input'},

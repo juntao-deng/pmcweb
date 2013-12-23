@@ -24,24 +24,23 @@ wdefine(function(){
 	});
 	
 	function doFetch() {
-		var servers = ctx.component('serverinput').value();
-		if(servers == null || servers.length == 0)
+		var server = ctx.component('serverinput').value();
+		if(server == null || server == "")
 			return;
 		var startTs = ctx.component('startts').value();
-		var endTs = ctx.component('endts').value();
-		if(startTs == null || startTs == "" || endTs == null || endTs == ""){
-			alert("Start Time or End Time can not be empty");
+		if(startTs == null || startTs == ""){
+			alert("Start Time can not be empty");
 			return;
 		}
 		var model = ctx.model('threadmodel');
 		model.reqParam('startTs', startTs);
-		model.reqParam('endTs', endTs);
-		model.reqParam("ips", servers.join(","));
+		model.reqParam('fetchType', "sqls");
+		model.reqParam("ips", server);
 		model.reload();
 	}
 	
 	$app.on('loaded', function(){
-		this.component('startts').value(new Date().format("MM/dd/yyyy hh:mm"));
+		this.component('startts').value(new Date().format("MM/dd/yyyy 00:00"));
 	});
 	
 	RestApi.action({

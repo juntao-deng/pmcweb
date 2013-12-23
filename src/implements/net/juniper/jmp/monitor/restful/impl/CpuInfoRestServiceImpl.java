@@ -54,10 +54,12 @@ public class CpuInfoRestServiceImpl implements CpuInfoRestService {
 		while(serverIt.hasNext()){
 			TargetServerInfo server = serverIt.next();
 			CpuInfo cpuInfo = (CpuInfo) reqResults.get(server);
+			CpuSummary summary = cacheMap.get(server.getAddress());
 			if(cpuInfo == null){
 				cpuInfo = new CpuInfo();
+				List<Integer> values = summary.getValues();
+				cpuInfo.setUsage(values.get(values.size() - 1));
 			}
-			CpuSummary summary = cacheMap.get(server.getAddress());
 			summary.queue((int) (cpuInfo.getUsage()));
 			results.add(summary);
 		}

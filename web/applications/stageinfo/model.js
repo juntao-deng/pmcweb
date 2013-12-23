@@ -8,7 +8,8 @@ wdefine(function(){
 	                               });
 	$app.metadata('detailstab', {items: [{id: 'item1', text: 'Method Stack'}, {id: 'item2', text: 'Sql Information'}]});
 	var navId = $app.reqData('navId');
-	$app.model('stagesmodel', {url: 'threadinfos/' + navId + "/stageinfos", idAttribute: 'callId'});
+	var restBase = $app.reqData("urlBase");
+	$app.model('stagesmodel', {url: restBase + '/' + navId + "/stageinfos", idAttribute: 'callId'});
 	$app.metadata('stagegrid', {model: 'stagesmodel', height:230, pagination: null,
 						columns:[
 	                                  {name: 'callId', text:'Id', width:80},
@@ -16,8 +17,8 @@ wdefine(function(){
 	                                  {name: 'stageName', text:'Name', width:70},
 	                                  {name: 'stagePath', text:'Req Path', width:90},
 	                                  {name: 'stageMethod', text:'Req Method', width:60},
-	                                  {name: 'stages', text:'Stages', width:40, align:"right"},        
-	                                  {name: 'sqls', text:'Sqls', width:40, align:"right"},
+	                                  {name: 'sumStageCount', text:'Sum Stages', width:40, align:"right"},        
+	                                  {name: 'sumSqlCount', text:'Sum Sqls', width:40, align:"right"},
 	                                  {name: 'conns', text:'Db Conns', width:40, align:"right"}
 	                          	]
 						}

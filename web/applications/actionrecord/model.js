@@ -2,15 +2,16 @@ wdefine(function(){
 	$app.metadata('useridinput', {label: 'User Id:', labelWidth: '50', hint: '', width: 60, defaultValue: 'super'});
 	$app.metadata('operationmenu', {groups: [
 	                                         {menus : [{id:'play', icon:'icon-play', name: ''}, 
-	                                                   {id:'stop', icon: 'icon-stop', name: ''},
-	                                                   {id:'export', icon: 'icon-download', name: 'Export'}
+	                                                   {id:'stop', icon: 'icon-stop', name: '', enable: false},
+	                                                   {id:'export', icon: 'icon-download', name: 'Export', statemgr: FwBase.Wtf.View.M_StateMgr},
+	                                                   {id:'stages', icon: 'icon-edit', name: 'Stages', statemgr: 'FwBase.Wtf.View.S_StateMgr'}
 	                                         		  ]
 	                                         }
 	                                        ]
 	                               });
 	$app.metadata('detailstab', {items: [{id: 'item1', text: 'Method Stack'}, {id: 'item2', text: 'Sql Information'}]});
-	$app.model('threadmodel', {url: 'threadinfos', lazyInit: true, idAttribute: 'callId'});
-	$app.metadata('threadgrid', {model: 'threadmodel', height:230, pagination: null,
+	$app.model('threadmodel', {url: 'threadinfosaction', lazyInit: true, idAttribute: 'callId'});
+	$app.metadata('threadgrid', {model: 'threadmodel', height:230,
 						columns:[
 	                                  {name: 'callId', text:'Id', width:80},
 	                                  {name: 'duration', text:'Duration', width:40},

@@ -13,6 +13,7 @@ public class TargetServerInfo implements Serializable {
 	private String port;
 	private boolean alive = false;
 	private boolean nodeAlive = false;
+	private int failCount = 0;
 	
 	public Integer getId() {
 		return id;
@@ -43,6 +44,12 @@ public class TargetServerInfo implements Serializable {
 	}
 	public void setNodeAlive(boolean nodeAlive) {
 		this.nodeAlive = nodeAlive;
+	}
+	public int getFailCount() {
+		return failCount;
+	}
+	public void setFailCount(int failCount) {
+		this.failCount = failCount;
 	}
 	
 }

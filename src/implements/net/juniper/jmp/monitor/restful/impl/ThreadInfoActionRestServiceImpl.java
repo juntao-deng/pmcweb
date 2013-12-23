@@ -1,9 +1,9 @@
 package net.juniper.jmp.monitor.restful.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,7 @@ import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.core.locator.ServiceLocator;
 import net.juniper.jmp.core.repository.PageResult;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
-import net.juniper.jmp.monitor.restful.ThreadInfoHisRestService;
+import net.juniper.jmp.monitor.restful.ThreadInfoActionRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.monitor.sys.MonitorInfo;
 import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
@@ -29,35 +29,29 @@ import org.springframework.data.domain.Pageable;
  * @author juntaod
  *
  */
-public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
-	private static final String THREADHISINFOS = "threadhisinfos";
+public class ThreadInfoActionRestServiceImpl implements ThreadInfoActionRestService {
+	private static final String THREADACTIONINFOS = "threadactioninfos";
+	private static Integer RECORD_INDEX = 0;
 	private IClientInfoService service = ServiceLocator.getService(IClientInfoService.class);
 	@Override
-	public PageResult<ThreadInfoDump> getThreadInfos(String startTs, String endTs) {
+	public PageResult<ThreadInfoDump> getThreadInfos(String recordId) {
 		String ipstr = ApiContext.getParameter("ips");
-		String fetchType = ApiContext.getParameter("fetchType");
-		if(fetchType == null)
-			fetchType = "";
-		String cache = THREADHISINFOS + fetchType;
-		if(endTs == null || endTs.equals("")){
-			endTs = "01/01/2020 00:00";
-		}
-		String cacheKey = ipstr + startTs + endTs;
-		CacheObject cacheObj = (CacheObject) ApiContext.getGlobalSessionCache().getCache(cache);
+		String cacheKey = ipstr + recordId;
+		CacheObject cacheObj = (CacheObject) ApiContext.getGlobalSessionCache().getCache(THREADACTIONINFOS);
 		if(cacheObj == null || !cacheObj.key.equals(cacheKey)){
 			
 			String[] ips = ipstr.split(",");
 			List<TargetServerInfo> servers = getServers(ips);
 	//		String startTs = ApiContext.getParameter("startts");
 	//		String endTs = ApiContext.getParameter("endts");
-			Map<TargetServerInfo, Object> reqResults = service.getPeriodThreadInfos(servers, startTs, endTs, fetchType);
+			Map<TargetServerInfo, Object> reqResults = service.getRecordThreadInfos(servers, recordId);
 			List<ThreadInfoDump> or = new ArrayList<ThreadInfoDump>();
 			Iterator<Entry<TargetServerInfo, Object>> it = reqResults.entrySet().iterator();
 			while(it.hasNext()){
 				Entry<TargetServerInfo, Object> entry = it.next();
-				ThreadInfoDump[] result = (ThreadInfoDump[]) entry.getValue();
+				List<ThreadInfoDump> result = (List<ThreadInfoDump>) entry.getValue();
 				if(result != null){
-					or.addAll(Arrays.asList(result));
+					or.addAll(result);
 	//				dr.addAll(detachResult(or));
 				}
 			}
@@ -72,7 +66,7 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
 			cacheObj = new CacheObject();
 			cacheObj.key = cacheKey;
 			cacheObj.list = or;
-			ApiContext.getGlobalSessionCache().addCache(cache, cacheObj);
+			ApiContext.getGlobalSessionCache().addCache(THREADACTIONINFOS, cacheObj);
 		}
 		
 		List<ThreadInfoDump> or = cacheObj.list;
@@ -102,14 +96,10 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
 	
 	@Override
 	public ThreadInfoDump getThreadInfo(String id) {
-		String fetchType = ApiContext.getParameter("fetchType");
-		if(fetchType == null)
-			fetchType = "";
-		String cache = THREADHISINFOS + fetchType;
-		CacheObject cacheObj = (CacheObject) ApiContext.getGlobalSessionCache().getCache(cache);
-		if(cacheObj == null)
+		CacheObject cache = (CacheObject) ApiContext.getGlobalSessionCache().getCache(THREADACTIONINFOS);
+		if(cache == null)
 			return null;
-		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) cacheObj.list;
+		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) cache.list;
 		if(dr == null)
 			return null;
 		Iterator<ThreadInfoDump> it = dr.iterator();
@@ -124,14 +114,10 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
 
 	@Override
 	public StageInfoBaseDump[] getStageInfos(String id) {
-		String fetchType = ApiContext.getParameter("fetchType");
-		if(fetchType == null)
-			fetchType = "";
-		String cache = THREADHISINFOS + fetchType;
-		CacheObject cacheObj = (CacheObject) ApiContext.getGlobalSessionCache().getCache(cache);
-		if(cacheObj == null)
+		CacheObject cache = (CacheObject) ApiContext.getGlobalSessionCache().getCache(THREADACTIONINFOS);
+		if(cache == null)
 			return null;
-		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) cacheObj.list;
+		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) cache.list;
 		if(dr == null)
 			return null;
 		StageInfoBaseDump[] result = doGetChildrenStages(dr.toArray(new ThreadInfoDump[0]), id);
@@ -161,14 +147,10 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
 
 	@Override
 	public StageInfoBaseDump getStageInfo(String id, String sid) {
-		String fetchType = ApiContext.getParameter("fetchType");
-		if(fetchType == null)
-			fetchType = "";
-		String cache = THREADHISINFOS + fetchType;
-		CacheObject cacheObj = (CacheObject) ApiContext.getGlobalSessionCache().getCache(cache);
-		if(cacheObj == null)
+		CacheObject cache = (CacheObject) ApiContext.getGlobalSessionCache().getCache(THREADACTIONINFOS);
+		if(cache == null)
 			return null;
-		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) cacheObj.list;
+		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) cache.list;
 		if(dr == null)
 			return null;
 		Iterator<ThreadInfoDump> it = dr.iterator();
@@ -206,6 +188,42 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
 
 	@Override
 	public Object processAction(String action, MultivaluedMap<String, String> form) {
+		if(action.equals("startRecord")){
+			List<TargetServerInfo> servers = getServersFromForm(form);
+			String recordId = "r_" + getRecordId((RECORD_INDEX ++));
+			service.startRecord(servers, recordId);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("recordId", recordId);
+			return map;
+		}
+		else if(action.equals("endRecord")){
+			List<TargetServerInfo> servers = getServersFromForm(form);
+			String recordId = form.getFirst("recordId");
+			service.endRecord(servers, recordId);
+		}
 		return null;
+	}
+
+	private List<TargetServerInfo> getServersFromForm(MultivaluedMap<String, String> form) {
+		String ipstr = form.getFirst("ips");
+		String[] ips = ipstr.split(",");
+		//only one server one times
+		List<TargetServerInfo> servers = getServers(ips);
+		if(servers == null || servers.size() == 0)
+			return null;
+		return servers;
+	}
+	
+	/**
+	 * ensure the id's length is 4
+	 * @param index
+	 * @return
+	 */
+	private String getRecordId(Integer index) {
+		String id = "" + index;
+		int length = id.length();
+		for(int i = 0; i < (4 - length); i ++)
+			id = "0" + id;
+		return id;
 	}
 }
