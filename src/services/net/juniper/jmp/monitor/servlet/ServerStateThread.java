@@ -26,6 +26,9 @@ public class ServerStateThread implements Runnable {
 				while(it.hasNext()){
 					TargetServerInfo server = it.next();
 					boolean serverAlive = clientInfoService.isServerLive(server);
+					if(!serverAlive){
+						server.setNodeAlive(false);
+					}
 					server.setAlive(serverAlive);
 				}
 			}

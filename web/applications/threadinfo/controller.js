@@ -34,7 +34,7 @@ wdefine(function(){
 			alert("TODO");
 		}
 		else if(options.trigger.id == "stages"){
-			var row = this.ctx.model('threadmodel').select().rows[0];
+			var row = this.ctx.model('threadmodel').selections().rows[0];
 			AppUtil.navigateToStack("monitor/stageinfo", {navId: row.id, urlBase: 'threadinfos'}, {title: "Stage Information"});
 		}
 	});

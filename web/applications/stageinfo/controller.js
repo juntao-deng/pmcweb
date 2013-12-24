@@ -4,7 +4,7 @@ wdefine(function(){
 			AppUtil.popStack();
 		}
 		else if(options.trigger.id == 'stages'){
-			var row = this.ctx.model('stagesmodel').select().rows[0];
+			var row = this.ctx.model('stagesmodel').selections().rows[0];
 			AppUtil.navigateToStack("monitor/stageinfo", {navId: row.id, urlBase: $app.reqData("urlBase")}, {title: "Stage Information"});
 		}
 		else if(options.trigger.id == 'export'){

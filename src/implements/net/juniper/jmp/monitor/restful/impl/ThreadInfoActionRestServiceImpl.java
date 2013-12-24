@@ -82,7 +82,7 @@ public class ThreadInfoActionRestServiceImpl implements ThreadInfoActionRestServ
 		Page<ThreadInfoDump> page = new PageImpl<ThreadInfoDump>(pageResults, p, totalSize);
 		return new PageResult<ThreadInfoDump>(page);
 	}
-
+	
 	private List<TargetServerInfo> getServers(String[] ips) {
 		Map<String, TargetServerInfo> serverMap = MonitorInfo.getInstance().getAllServers();
 		List<TargetServerInfo> serverList = new ArrayList<TargetServerInfo>();
