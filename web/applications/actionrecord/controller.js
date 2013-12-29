@@ -41,6 +41,10 @@ wdefine(function(){
 				}
 			});
 		}
+		else if(options.trigger.id == "stages"){
+			var row = this.ctx.model('threadmodel').selections().rows[0];
+			AppUtil.navigateToStack("monitor/stageinfo", {navId: row.id, urlBase: 'threadinfosaction'}, {title: "Stage Information"});
+		}
 	});
 	
 	function doFetch() {

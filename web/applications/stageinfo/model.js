@@ -1,4 +1,11 @@
 wdefine(function(){
+	function stageFormatter(cellValue, opts, rowdata, act) {
+		return rowdata['stages'] + ' / ' + cellValue;
+	}
+	
+	function sqlFormatter(cellValue, opts, rowdata, act) {
+		return rowdata['sqls'] + ' / ' + cellValue;
+	}
 	$app.metadata('operationmenu', {groups: [
 	                                         {menus : [{id:'back', icon:'icon-backward', name: 'Back'},
 	                                                   {id:'stages', icon: 'icon-edit', name: 'Stages'}
@@ -17,12 +24,12 @@ wdefine(function(){
 	                                  {name: 'stageName', text:'Name', width:70},
 	                                  {name: 'stagePath', text:'Req Path', width:90},
 	                                  {name: 'stageMethod', text:'Req Method', width:60},
-	                                  {name: 'sumStageCount', text:'Sum Stages', width:40, align:"right"},        
-	                                  {name: 'sumSqlCount', text:'Sum Sqls', width:40, align:"right"},
+	                                  {name: 'sumStageCount', text:'Sum Stages', width:40, align:"right", formatter: stageFormatter},        
+	                                  {name: 'sumSqlCount', text:'Sum Sqls', width:40, align:"right", formatter: sqlFormatter},
 	                                  {name: 'conns', text:'Db Conns', width:40, align:"right"}
 	                          	]
 						}
 				);
-	$app.metadata('methodForm', {model: 'stagesmodel', rows: 1, elements:[{name:'methodStack.method', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
+	$app.metadata('methodForm', {model: 'stagesmodel', rows: 1, elements:[{name:'detachedMethod', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
 	$app.metadata('sqlsForm', {model: 'stagesmodel', rows: 1, elements:[{name:'detachedSql', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
 });

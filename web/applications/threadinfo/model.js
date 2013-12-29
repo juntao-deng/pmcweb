@@ -1,4 +1,12 @@
 wdefine(function(){
+	function stageFormatter(cellValue, opts, rowdata, act) {
+		return rowdata['stages'] + ' / ' + cellValue;
+	}
+	
+	function sqlFormatter(cellValue, opts, rowdata, act) {
+		return rowdata['sqls'] + ' / ' + cellValue;
+	}
+	
 	$app.metadata('autorefresh', {label: 'Refresh:', labelWidth: '50', defaultValue: false});
 	$app.metadata('refreshinterval', {label: '&nbsp;&nbsp;Every:', labelWidth: '40', hint: 'Sec(s)', width: 20, defaultValue: 10, editable: false});
 	$app.metadata('operationmenu', {groups: [
@@ -22,13 +30,13 @@ wdefine(function(){
 	                                  {name: 'stageMethod', text:'Req Method', width:60},
 	                                  //{name: 'requestBytes', text:'Up Bytes', width:40, align:"right", formatter:"int"},
 	                                  //{name: 'responseBytes', text:'Down Bytes', width:40, align:"right", formatter:"int"},
-	                                  {name: 'sumStageCount', text:'Sum Stages', width:40, align:"right"},        
-	                                  {name: 'sumSqlCount', text:'Sum Sqls', width:40, align:"right"},
+	                                  {name: 'sumStageCount', text:'Stages / Total', width:40, align:"right", formatter: stageFormatter},        
+	                                  {name: 'sumSqlCount', text:'Sqls / Total', width:40, align:"right", formatter: sqlFormatter},
 	                                  {name: 'conns', text:'Db Conns', width:40, align:"right"}
 	                          	]
 						}
 				);
-	$app.metadata('methodForm', {model: 'threadmodel', rows: 1, elements:[{name:'methodStack.method', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
+	$app.metadata('methodForm', {model: 'threadmodel', rows: 1, elements:[{name:'detachedMethod', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
 	$app.metadata('sqlsForm', {model: 'threadmodel', rows: 1, elements:[{name:'detachedSql', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
 	$app.metadata("serverinput", {label: "Active Nodes:", labelWidth:'90', multiple: true, width: 300});
 	

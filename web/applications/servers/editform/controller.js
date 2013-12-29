@@ -1,7 +1,12 @@
 wdefine(function(){
 	$app.on('loaded', function(){
 		var model = this.model('editmodel');
-		model.row();
+		var itemId = this.reqData("itemId");
+		var row = model.row();
+		if(itemId){
+			row.id = itemId;
+			row.fetch();
+		}
 		model.select(0);
 	});
 	

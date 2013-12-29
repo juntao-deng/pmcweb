@@ -28,7 +28,7 @@ wdefine(function(){
 	                          	]
 						}
 				);
-	$app.metadata('methodForm', {model: 'threadmodel', rows: 1, elements:[{name:'methodStack.method', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
+	$app.metadata('methodForm', {model: 'threadmodel', rows: 1, elements:[{name:'detachedMethod', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
 	$app.metadata('sqlsForm', {model: 'threadmodel', rows: 1, elements:[{name:'detachedSql', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
 	$app.metadata("serverinput", {label: "Active Nodes:", labelWidth:'90', multiple: true, width: 300});
 });

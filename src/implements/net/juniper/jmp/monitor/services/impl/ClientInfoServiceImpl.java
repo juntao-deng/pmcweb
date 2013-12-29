@@ -13,6 +13,7 @@ import java.util.concurrent.CountDownLatch;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.proxy.HttpProxy;
 import net.juniper.jmp.monitor.services.IClientInfoService;
+import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,13 @@ public class ClientInfoServiceImpl implements IClientInfoService{
 	private Logger logger = Logger.getLogger(ClientInfoServiceImpl.class);
 	public Map<TargetServerInfo, Object> getThreadInfos(List<TargetServerInfo> servers){
 		return callService(servers, "getThreadInfos", null);
+	}
+	
+	private Object callService(TargetServerInfo server, String methodName, Object[] params){
+		List<TargetServerInfo> serverList = new ArrayList<TargetServerInfo>();
+		serverList.add(server);
+		Map<TargetServerInfo, Object> resultMap = callService(serverList, methodName, params);
+		return resultMap == null ? null : resultMap.get(server);
 	}
 	
 	private Map<TargetServerInfo, Object> callService(List<TargetServerInfo> servers, String methodName, Object[] params){
@@ -112,6 +120,21 @@ public class ClientInfoServiceImpl implements IClientInfoService{
 	@Override
 	public Map<TargetServerInfo, Object> getRecordThreadInfos(List<TargetServerInfo> servers, String recordId) {
 		return callService(servers, "getRecordResult", new String[]{recordId}, 10000);
+	}
+
+	@Override
+	public StageInfoBaseDump[] getStagesByParentId(TargetServerInfo server, String callId) {
+		return (StageInfoBaseDump[]) callService(server, "getStagesByParentId", new String[]{callId});
+	}
+
+	@Override
+	public Map<TargetServerInfo, Object> getSqlInfos(List<TargetServerInfo> servers, String startTime, String endTime, String fetchType) {
+		return callService(servers, "getSqlInfos", new String[]{startTime, endTime, fetchType});
+	}
+
+	@Override
+	public StageInfoBaseDump getStageById(TargetServerInfo server, String callId) {
+		return (StageInfoBaseDump) callService(server, "getStageById", new String[]{callId});
 	}
 }
 

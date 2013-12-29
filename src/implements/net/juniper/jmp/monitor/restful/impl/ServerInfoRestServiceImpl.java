@@ -1,5 +1,8 @@
 package net.juniper.jmp.monitor.restful.impl;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import javax.ws.rs.core.MultivaluedMap;
 
 import net.juniper.jmp.core.ctx.ApiContext;
@@ -8,6 +11,7 @@ import net.juniper.jmp.core.repository.PageResult;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.ServerInfoRestService;
 import net.juniper.jmp.monitor.services.IServerInfoService;
+import net.juniper.jmp.monitor.sys.MonitorInfo;
 
 import org.springframework.data.domain.Page;
 /**
@@ -25,6 +29,13 @@ public class ServerInfoRestServiceImpl implements ServerInfoRestService {
 
 	@Override
 	public TargetServerInfo getServerInfo(String id) {
+		Map<String, TargetServerInfo> serverMap = MonitorInfo.getInstance().getAllServers();
+		Iterator<TargetServerInfo> sit = serverMap.values().iterator();
+		while(sit.hasNext()){
+			TargetServerInfo server = sit.next();
+			if(server.getId().toString().equals(id))
+				return server;
+		}
 		return null;
 	}
 

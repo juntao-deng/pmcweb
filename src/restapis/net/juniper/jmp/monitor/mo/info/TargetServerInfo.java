@@ -13,6 +13,7 @@ public class TargetServerInfo implements Serializable {
 	private String port;
 	private boolean alive = false;
 	private boolean nodeAlive = false;
+	private String monitoruser = "Free";
 	private int failCount = 0;
 	
 	public Integer getId() {
@@ -50,6 +51,12 @@ public class TargetServerInfo implements Serializable {
 	}
 	public void setFailCount(int failCount) {
 		this.failCount = failCount;
+	}
+	public String getMonitoruser() {
+		return monitoruser;
+	}
+	public void setMonitoruser(String monitoruser) {
+		this.monitoruser = monitoruser;
 	}
 	
 }

@@ -17,7 +17,6 @@ import net.juniper.jmp.core.repository.PageResult;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.ThreadInfoHisRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
-import net.juniper.jmp.monitor.sys.MonitorInfo;
 import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 import net.juniper.jmp.tracer.dumper.info.ThreadInfoDump;
 
@@ -29,7 +28,7 @@ import org.springframework.data.domain.Pageable;
  * @author juntaod
  *
  */
-public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
+public class ThreadInfoHisRestServiceImpl extends AbstractMonitorInfoRestService implements ThreadInfoHisRestService {
 	private static final String THREADHISINFOS = "threadhisinfos";
 	private IClientInfoService service = ServiceLocator.getService(IClientInfoService.class);
 	@Override
@@ -38,12 +37,12 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
 		String fetchType = ApiContext.getParameter("fetchType");
 		if(fetchType == null)
 			fetchType = "";
-		String cache = THREADHISINFOS + fetchType;
+//		String cache = THREADHISINFOS + fetchType;
 		if(endTs == null || endTs.equals("")){
 			endTs = "01/01/2020 00:00";
 		}
-		String cacheKey = ipstr + startTs + endTs;
-		CacheObject cacheObj = (CacheObject) ApiContext.getGlobalSessionCache().getCache(cache);
+		String cacheKey = ipstr + startTs + endTs + fetchType;
+		CacheObject cacheObj = (CacheObject) ApiContext.getGlobalSessionCache().getCache(THREADHISINFOS);
 		if(cacheObj == null || !cacheObj.key.equals(cacheKey)){
 			
 			String[] ips = ipstr.split(",");
@@ -57,22 +56,18 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
 				Entry<TargetServerInfo, Object> entry = it.next();
 				ThreadInfoDump[] result = (ThreadInfoDump[]) entry.getValue();
 				if(result != null){
+					bindServer(entry.getKey(), result);
 					or.addAll(Arrays.asList(result));
 	//				dr.addAll(detachResult(or));
 				}
 			}
 			
-			Collections.sort(or, new Comparator<ThreadInfoDump>(){
-				@Override
-				public int compare(ThreadInfoDump o1, ThreadInfoDump o2) {
-					return o1.getEndTs().compareTo(o2.getEndTs());
-				}
-			});
+			processForFetchType(fetchType, or);
 			
 			cacheObj = new CacheObject();
 			cacheObj.key = cacheKey;
 			cacheObj.list = or;
-			ApiContext.getGlobalSessionCache().addCache(cache, cacheObj);
+			ApiContext.getGlobalSessionCache().addCache(THREADHISINFOS, cacheObj);
 		}
 		
 		List<ThreadInfoDump> or = cacheObj.list;
@@ -88,25 +83,25 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
 		Page<ThreadInfoDump> page = new PageImpl<ThreadInfoDump>(pageResults, p, totalSize);
 		return new PageResult<ThreadInfoDump>(page);
 	}
-	
-	private List<TargetServerInfo> getServers(String[] ips) {
-		Map<String, TargetServerInfo> serverMap = MonitorInfo.getInstance().getAllServers();
-		List<TargetServerInfo> serverList = new ArrayList<TargetServerInfo>();
-		for(String ip : ips) {
-			TargetServerInfo server = serverMap.get(ip);
-			if(server != null)
-				serverList.add(server);
+
+	private void processForFetchType(String fetchType, List<ThreadInfoDump> or) {
+		if(fetchType.equals("")){
+			Collections.sort(or, new Comparator<ThreadInfoDump>(){
+				@Override
+				public int compare(ThreadInfoDump o1, ThreadInfoDump o2) {
+					return o1.getEndTs().compareTo(o2.getEndTs());
+				}
+			});
 		}
-		return serverList;
 	}
 	
 	@Override
 	public ThreadInfoDump getThreadInfo(String id) {
-		String fetchType = ApiContext.getParameter("fetchType");
-		if(fetchType == null)
-			fetchType = "";
-		String cache = THREADHISINFOS + fetchType;
-		CacheObject cacheObj = (CacheObject) ApiContext.getGlobalSessionCache().getCache(cache);
+//		String fetchType = ApiContext.getParameter("fetchType");
+//		if(fetchType == null)
+//			fetchType = "";
+//		String cache = THREADHISINFOS + fetchType;
+		CacheObject cacheObj = (CacheObject) ApiContext.getGlobalSessionCache().getCache(THREADHISINFOS);
 		if(cacheObj == null)
 			return null;
 		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) cacheObj.list;
@@ -124,11 +119,7 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
 
 	@Override
 	public StageInfoBaseDump[] getStageInfos(String id) {
-		String fetchType = ApiContext.getParameter("fetchType");
-		if(fetchType == null)
-			fetchType = "";
-		String cache = THREADHISINFOS + fetchType;
-		CacheObject cacheObj = (CacheObject) ApiContext.getGlobalSessionCache().getCache(cache);
+		CacheObject cacheObj = (CacheObject) ApiContext.getGlobalSessionCache().getCache(THREADHISINFOS);
 		if(cacheObj == null)
 			return null;
 		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) cacheObj.list;
@@ -143,8 +134,20 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
 			for(int i = 0; i < stages.length; i ++){
 				StageInfoBaseDump t = stages[i];
 				if(t.getCallId().equals(id)){
+					if(t.getSumStageCount() == 0)
+						return null;
 					List<StageInfoBaseDump> clist = t.getChildrenStages();
-					return clist == null ? null : clist.toArray(new StageInfoBaseDump[0]);
+					if(clist == null){
+						TargetServerInfo server = (TargetServerInfo) t.getUserObject();
+						StageInfoBaseDump[] cstages = service.getStagesByParentId(server, t.getCallId());
+						clist = new ArrayList<StageInfoBaseDump>();
+						if(cstages != null){
+							bindServer(server, cstages);
+							clist.addAll(Arrays.asList(cstages));
+						}
+						t.setChildrenStages(clist);
+					}
+					return detachStages(clist);
 				}
 				else{
 					List<StageInfoBaseDump> slist = t.getChildrenStages();
@@ -158,14 +161,25 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
 		}
 		return null;
 	}
+	
+	private StageInfoBaseDump[] detachStages(List<StageInfoBaseDump> list) {
+		if(list == null)
+			return null;
+		List<StageInfoBaseDump> stageList = new ArrayList<StageInfoBaseDump>();
+		Iterator<StageInfoBaseDump> it = list.iterator();
+		while(it.hasNext()){
+			stageList.add(it.next().detach());
+		}
+		return stageList.toArray(new StageInfoBaseDump[0]);
+	}
 
 	@Override
 	public StageInfoBaseDump getStageInfo(String id, String sid) {
-		String fetchType = ApiContext.getParameter("fetchType");
-		if(fetchType == null)
-			fetchType = "";
-		String cache = THREADHISINFOS + fetchType;
-		CacheObject cacheObj = (CacheObject) ApiContext.getGlobalSessionCache().getCache(cache);
+//		String fetchType = ApiContext.getParameter("fetchType");
+//		if(fetchType == null)
+//			fetchType = "";
+//		String cache = THREADHISINFOS + fetchType;
+		CacheObject cacheObj = (CacheObject) ApiContext.getGlobalSessionCache().getCache(THREADHISINFOS);
 		if(cacheObj == null)
 			return null;
 		List<ThreadInfoDump> dr = (List<ThreadInfoDump>) cacheObj.list;
@@ -178,7 +192,7 @@ public class ThreadInfoHisRestServiceImpl implements ThreadInfoHisRestService {
 			if(slist != null){
 				StageInfoBaseDump result = doGetChildrenStage(slist.toArray(new StageInfoBaseDump[0]), sid);
 				if(result != null)
-					return result;
+					return result.detach();
 			}
 		}
 		return null;

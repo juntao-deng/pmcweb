@@ -17,7 +17,6 @@ import net.juniper.jmp.core.repository.PageResult;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.ThreadInfoActionRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
-import net.juniper.jmp.monitor.sys.MonitorInfo;
 import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 import net.juniper.jmp.tracer.dumper.info.ThreadInfoDump;
 
@@ -29,7 +28,7 @@ import org.springframework.data.domain.Pageable;
  * @author juntaod
  *
  */
-public class ThreadInfoActionRestServiceImpl implements ThreadInfoActionRestService {
+public class ThreadInfoActionRestServiceImpl extends AbstractMonitorInfoRestService implements ThreadInfoActionRestService {
 	private static final String THREADACTIONINFOS = "threadactioninfos";
 	private static Integer RECORD_INDEX = 0;
 	private IClientInfoService service = ServiceLocator.getService(IClientInfoService.class);
@@ -81,17 +80,6 @@ public class ThreadInfoActionRestServiceImpl implements ThreadInfoActionRestServ
 		}
 		Page<ThreadInfoDump> page = new PageImpl<ThreadInfoDump>(pageResults, p, totalSize);
 		return new PageResult<ThreadInfoDump>(page);
-	}
-	
-	private List<TargetServerInfo> getServers(String[] ips) {
-		Map<String, TargetServerInfo> serverMap = MonitorInfo.getInstance().getAllServers();
-		List<TargetServerInfo> serverList = new ArrayList<TargetServerInfo>();
-		for(String ip : ips) {
-			TargetServerInfo server = serverMap.get(ip);
-			if(server != null)
-				serverList.add(server);
-		}
-		return serverList;
 	}
 	
 	@Override

@@ -28,14 +28,23 @@ public class NodeStateThread implements Runnable {
 					TargetServerInfo server = it.next();
 					boolean nodeAlive = clientInfoService.isNodeLive(server);
 					logger.info("node is alive:" + nodeAlive + ", ip:" + server.getAddress());
-					//one more chance, for node may be too busy to response
-					if(server.isNodeAlive()){
-						if(server.getFailCount() == 0)
-							server.setFailCount(1);
+					if(nodeAlive){
+						server.setNodeAlive(true);
 					}
 					else{
-						server.setFailCount(0);
-						server.setNodeAlive(nodeAlive);
+						//one more chance, for node may be too busy to response
+						if(server.isNodeAlive()){
+							if(server.getFailCount() == 0){
+								server.setFailCount(1);
+							}
+							else{
+								server.setFailCount(0);
+								server.setNodeAlive(false);
+							}
+						}
+						else{
+							server.setNodeAlive(false);
+						}
 					}
 				}
 			}

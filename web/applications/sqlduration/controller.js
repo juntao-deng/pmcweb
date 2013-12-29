@@ -1,4 +1,5 @@
 wdefine(function(){
+	$app.stateManager().connectState([$app.model('threadmodel')], [$app.component('operationmenu')]);
 	var ctx = $app;
 	$app.component('operationmenu').on('click', function(options){
 		if(options.trigger.id == 'fetch'){
@@ -12,14 +13,14 @@ wdefine(function(){
 		else if(options.trigger.id == 'export'){
 			alert("TODO");
 		}
-		else if(options.trigger.id == "stages"){
+		else if(options.trigger.id == "stage"){
 			var row = this.ctx.model('threadmodel').selections().rows[0];
-			AppUtil.navigateToStack("monitor/stageinfo", {navId: row.id, urlBase: 'threadinfoshis'}, {title: "Stage Information"});
+			AppUtil.navigateToDialog("monitor/stagesummary", {navId: row.id, itemId: row.get('callId'), urlBase: 'sqlinfos'}, {title: "Stage Summary", width: "800", height: "500"});
 		}
 	});
 	
 	$app.component('threadgrid').on('dblclick', function(options){
-		AppUtil.navigateToDialog("monitor/threadsummary", {itemId: options.rowId, urlBase: 'threadinfoshis'}, {title: "Thread Summary", width: "800", height: "500"});
+		AppUtil.navigateToDialog("monitor/stagesummary", {navId: options.rowId, itemId: options.row.get('callId'), urlBase: 'sqlinfos'}, {title: "Stage Summary", width: "800", height: "500"});
 	});
 	
 	function doFetch() {
@@ -27,15 +28,14 @@ wdefine(function(){
 		if(servers == null || servers.length == 0)
 			return;
 		var startTs = ctx.component('startts').value();
-		var endTs = ctx.component('endts').value();
-		if(startTs == null || startTs == "" || endTs == null || endTs == ""){
+		if(startTs == null || startTs == ""){
 			alert("Start Time or End Time can not be empty");
 			return;
 		}
 		var model = ctx.model('threadmodel');
 		model.reqParam('startTs', startTs);
-		model.reqParam('endTs', endTs);
 		model.reqParam("ips", servers.join(","));
+		model.reqParam('fetchType', 'duration');
 		model.reload();
 	}
 	

@@ -23,8 +23,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
-
+/**
+ * 
+ * @author juntaod
+ *
+ */
 public class HttpProxy {
+	private static final int DEFAULT_TIMEOUT = 40000; //40s
 	private Logger logger = Logger.getLogger(HttpProxy.class);
 	private static Map<String, HttpProxy> proxyMap = new HashMap<String, HttpProxy>();
 	private TargetServerInfo serverInfo;
@@ -34,18 +39,15 @@ public class HttpProxy {
 		this.serverInfo = info;
 	}
 	
-//	public byte[] request(String serviceName, String method, Object[] params) throws Exception {
-//		return doRequest(serviceName, method, params, -1);
-//	}
-	
 	public Object request(String serviceName, String method, Object[] params, int timeout) throws Exception {
 		String targetUrl = "http://" + serverInfo.getAddress() + ":" + serverInfo.getPort() + "/dispatcher";
 		HttpPost httpPost = new HttpPost(targetUrl);
 		if(timeout <= -1)
-			timeout = 20000;
+			timeout = DEFAULT_TIMEOUT;
 		Builder builder = RequestConfig.custom();
 		builder.setConnectTimeout(timeout);
-		builder.setConnectTimeout(timeout);
+//		builder.setConnectTimeout(timeout);
+		builder.setConnectionRequestTimeout(timeout);
 		builder.setSocketTimeout(timeout);
 		httpPost.setConfig(builder.build());
 		
