@@ -5,11 +5,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import net.juniper.jmp.monitor.mo.home.NavType;
-
 @Entity
 @Table (name="wtf_navgroup")
-public class NavGroupEntity extends NavType{
+public class NavGroupEntity{
 	@Id
 	private String id;
 	@NotNull

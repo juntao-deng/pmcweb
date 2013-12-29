@@ -3,11 +3,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import net.juniper.jmp.monitor.mo.home.NavType;
 
 @Entity
 @Table (name="wtf_navitem")
-public class NavItemEntity extends NavType {
+public class NavItemEntity{
 	@Id
 	private String id;
 	@NotNull
