@@ -32,7 +32,8 @@ wdefine(function(){
 	                                  //{name: 'responseBytes', text:'Down Bytes', width:40, align:"right", formatter:"int"},
 	                                  {name: 'sumStageCount', text:'Stages / Total', width:40, align:"right", formatter: stageFormatter},        
 	                                  {name: 'sumSqlCount', text:'Sqls / Total', width:40, align:"right", formatter: sqlFormatter},
-	                                  {name: 'conns', text:'Db Conns', width:40, align:"right"}
+	                                  {name: 'conns', text:'Db Conns', width:40, align:"right"},
+	                                  {name: 'asyncId', text:'Async', width:40}
 	                          	]
 						}
 				);

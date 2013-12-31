@@ -54,7 +54,8 @@ public class ThreadInfoActionRestServiceImpl extends AbstractMonitorInfoRestServ
 	//				dr.addAll(detachResult(or));
 				}
 			}
-			
+			reorganizeAsyncResult(or);
+			addAsyncSummary(or.toArray(new StageInfoBaseDump[0]));
 			Collections.sort(or, new Comparator<ThreadInfoDump>(){
 				@Override
 				public int compare(ThreadInfoDump o1, ThreadInfoDump o2) {
@@ -118,7 +119,15 @@ public class ThreadInfoActionRestServiceImpl extends AbstractMonitorInfoRestServ
 				StageInfoBaseDump t = stages[i];
 				if(t.getCallId().equals(id)){
 					List<StageInfoBaseDump> clist = t.getChildrenStages();
-					return clist == null ? null : clist.toArray(new StageInfoBaseDump[0]);
+					if(clist == null)
+						clist = new ArrayList<StageInfoBaseDump>();
+					
+					List<StageInfoBaseDump> asyncList = this.getAsyncChildren(id);
+					if(asyncList != null)
+						clist.addAll(asyncList);
+					if(clist.size() > 0)
+						addAsyncSummary(clist.toArray(new StageInfoBaseDump[0]));
+					return clist.toArray(new StageInfoBaseDump[0]);
 				}
 				else{
 					List<StageInfoBaseDump> slist = t.getChildrenStages();
@@ -154,7 +163,8 @@ public class ThreadInfoActionRestServiceImpl extends AbstractMonitorInfoRestServ
 		return null;
 	}
 
-	private StageInfoBaseDump doGetChildrenStage(StageInfoBaseDump[] slist, String sid) {
+	@Override
+	protected StageInfoBaseDump doGetChildrenStage(StageInfoBaseDump[] slist, String sid) {
 		for(int i = 0; i < slist.length; i ++){
 			StageInfoBaseDump s = slist[i];
 			if(s.getCallId().equals(sid))

@@ -63,7 +63,8 @@ public class ThreadInfoHisRestServiceImpl extends AbstractMonitorInfoRestService
 			}
 			
 			processForFetchType(fetchType, or);
-			
+			reorganizeAsyncResult(or);
+			addAsyncSummary(or.toArray(new StageInfoBaseDump[0]));
 			cacheObj = new CacheObject();
 			cacheObj.key = cacheKey;
 			cacheObj.list = or;
@@ -97,10 +98,6 @@ public class ThreadInfoHisRestServiceImpl extends AbstractMonitorInfoRestService
 	
 	@Override
 	public ThreadInfoDump getThreadInfo(String id) {
-//		String fetchType = ApiContext.getParameter("fetchType");
-//		if(fetchType == null)
-//			fetchType = "";
-//		String cache = THREADHISINFOS + fetchType;
 		CacheObject cacheObj = (CacheObject) ApiContext.getGlobalSessionCache().getCache(THREADHISINFOS);
 		if(cacheObj == null)
 			return null;
@@ -132,25 +129,30 @@ public class ThreadInfoHisRestServiceImpl extends AbstractMonitorInfoRestService
 	private StageInfoBaseDump[] doGetChildrenStages(StageInfoBaseDump[] stages, String id){
 		if(stages != null){
 			for(int i = 0; i < stages.length; i ++){
-				StageInfoBaseDump t = stages[i];
-				if(t.getCallId().equals(id)){
-					if(t.getSumStageCount() == 0)
+				StageInfoBaseDump stage = stages[i];
+				if(stage.getCallId().equals(id)){
+					if(stage.getSumStageCount() == 0)
 						return null;
-					List<StageInfoBaseDump> clist = t.getChildrenStages();
+					List<StageInfoBaseDump> clist = stage.getChildrenStages();
 					if(clist == null){
-						TargetServerInfo server = (TargetServerInfo) t.getUserObject();
-						StageInfoBaseDump[] cstages = service.getStagesByParentId(server, t.getCallId());
+						TargetServerInfo server = (TargetServerInfo) stage.getUserObject();
+						StageInfoBaseDump[] cstages = service.getStagesByParentId(server, stage.getCallId());
 						clist = new ArrayList<StageInfoBaseDump>();
 						if(cstages != null){
 							bindServer(server, cstages);
 							clist.addAll(Arrays.asList(cstages));
 						}
-						t.setChildrenStages(clist);
+						List<StageInfoBaseDump> asyncList = this.getAsyncChildren(id);
+						if(asyncList != null)
+							clist.addAll(asyncList);
+						if(clist.size() > 0)
+							addAsyncSummary(clist.toArray(new StageInfoBaseDump[0]));
+						stage.setChildrenStages(clist);
 					}
 					return detachStages(clist);
 				}
 				else{
-					List<StageInfoBaseDump> slist = t.getChildrenStages();
+					List<StageInfoBaseDump> slist = stage.getChildrenStages();
 					if(slist != null){
 						StageInfoBaseDump[] result = doGetChildrenStages(slist.toArray(new StageInfoBaseDump[0]), id);
 						if(result != null)
@@ -161,7 +163,7 @@ public class ThreadInfoHisRestServiceImpl extends AbstractMonitorInfoRestService
 		}
 		return null;
 	}
-	
+
 	private StageInfoBaseDump[] detachStages(List<StageInfoBaseDump> list) {
 		if(list == null)
 			return null;
@@ -170,6 +172,7 @@ public class ThreadInfoHisRestServiceImpl extends AbstractMonitorInfoRestService
 		while(it.hasNext()){
 			stageList.add(it.next().detach());
 		}
+		
 		return stageList.toArray(new StageInfoBaseDump[0]);
 	}
 
@@ -198,7 +201,10 @@ public class ThreadInfoHisRestServiceImpl extends AbstractMonitorInfoRestService
 		return null;
 	}
 
-	private StageInfoBaseDump doGetChildrenStage(StageInfoBaseDump[] slist, String sid) {
+	/**
+	 *	@Override
+	 */
+	protected StageInfoBaseDump doGetChildrenStage(StageInfoBaseDump[] slist, String sid) {
 		for(int i = 0; i < slist.length; i ++){
 			StageInfoBaseDump s = slist[i];
 			if(s.getCallId().equals(sid))
