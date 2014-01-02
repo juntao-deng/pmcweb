@@ -1,6 +1,6 @@
 package net.juniper.jmp.monitor.servlet;
 
-import java.util.Iterator;
+import java.util.concurrent.CountDownLatch;
 
 import net.juniper.jmp.core.locator.ServiceLocator;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
@@ -17,19 +17,22 @@ import org.slf4j.LoggerFactory;
 public class ServerStateThread implements Runnable {
 	private Logger logger = LoggerFactory.getLogger(NodeStateThread.class);
 	private IServerInfoService serverService = ServiceLocator.getService(IServerInfoService.class);
-	private IClientInfoService clientInfoService = ServiceLocator.getService(IClientInfoService.class);
 	@Override
 	public void run() {
-		while(true){
 			try{
-				Iterator<TargetServerInfo> it = serverService.getAllServers().values().iterator();
-				while(it.hasNext()){
-					TargetServerInfo server = it.next();
-					boolean serverAlive = clientInfoService.isServerLive(server);
-					if(!serverAlive){
-						server.setNodeAlive(false);
+				TargetServerInfo[] servers = serverService.getAllServers().values().toArray(new TargetServerInfo[0]);
+				if(servers.length > 0){
+					CountDownLatch countDown = new CountDownLatch(servers.length);
+					for(int i = 0; i < servers.length; i ++){
+						TargetServerInfo server = servers[i];
+						new Thread(new ConnectThread(server, countDown)).start();
 					}
-					server.setAlive(serverAlive);
+					try {
+						countDown.await();
+					} 
+					catch (InterruptedException e) {
+						logger.error(e.getMessage(), e);
+					}
 				}
 			}
 			finally{
@@ -40,6 +43,29 @@ public class ServerStateThread implements Runnable {
 					logger.error(e.getMessage(), e);
 				}
 			}
+	}
+}
+
+class ConnectThread implements Runnable{
+	private IClientInfoService clientInfoService = ServiceLocator.getService(IClientInfoService.class);
+	private TargetServerInfo server;
+	private CountDownLatch countDown;
+	public ConnectThread(TargetServerInfo server, CountDownLatch countDown){
+		this.server = server;
+		this.countDown = countDown;
+	}
+	@Override
+	public void run() {
+		try{
+			boolean serverAlive = clientInfoService.isServerLive(server);
+			if(!serverAlive){
+				server.setNodeAlive(false);
+			}
+			server.setAlive(serverAlive);
+		}
+		finally{
+			countDown.countDown();
 		}
 	}
+	
 }

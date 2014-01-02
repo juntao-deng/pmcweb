@@ -135,19 +135,16 @@ public class ThreadInfoHisRestServiceImpl extends AbstractMonitorInfoRestService
 						return null;
 					List<StageInfoBaseDump> clist = stage.getChildrenStages();
 					if(clist == null){
+						clist = new ArrayList<StageInfoBaseDump>();
+						stage.setChildrenStages(clist);
+						
 						TargetServerInfo server = (TargetServerInfo) stage.getUserObject();
 						StageInfoBaseDump[] cstages = service.getStagesByParentId(server, stage.getCallId());
-						clist = new ArrayList<StageInfoBaseDump>();
 						if(cstages != null){
 							bindServer(server, cstages);
 							clist.addAll(Arrays.asList(cstages));
 						}
-						List<StageInfoBaseDump> asyncList = this.getAsyncChildren(id);
-						if(asyncList != null)
-							clist.addAll(asyncList);
-						if(clist.size() > 0)
-							addAsyncSummary(clist.toArray(new StageInfoBaseDump[0]));
-						stage.setChildrenStages(clist);
+						this.addAndIncreaseAsyncRequestedChildren(stage);
 					}
 					return detachStages(clist);
 				}

@@ -91,7 +91,7 @@ public class ClientInfoServiceImpl implements IClientInfoService{
 	@Override
 	public boolean isServerLive(TargetServerInfo server) {
 		try {
-			Object results = HttpProxy.getInstance(server).request(SERVICE_NAME, "getServerState", null, 10000);
+			Object results = HttpProxy.getInstance(server).request(SERVICE_NAME, "getServerState", null, 3000);
 			if(results == null)
 				return false;
 			return true;
@@ -159,7 +159,6 @@ class HttpRequestThread implements Runnable{
 		ObjectInputStream objInput = null;
 		try {
 			Object result = HttpProxy.getInstance(serverInfo).request(ClientInfoServiceImpl.SERVICE_NAME, methodName, params, timeout);
-			logger.info("got message for method:" + methodName);
 			resultsMap.put(serverInfo, result);
 		} 
 		catch (Exception e) {

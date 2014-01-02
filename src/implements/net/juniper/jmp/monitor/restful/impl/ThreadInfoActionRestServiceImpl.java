@@ -116,21 +116,18 @@ public class ThreadInfoActionRestServiceImpl extends AbstractMonitorInfoRestServ
 	private StageInfoBaseDump[] doGetChildrenStages(StageInfoBaseDump[] stages, String id){
 		if(stages != null){
 			for(int i = 0; i < stages.length; i ++){
-				StageInfoBaseDump t = stages[i];
-				if(t.getCallId().equals(id)){
-					List<StageInfoBaseDump> clist = t.getChildrenStages();
-					if(clist == null)
+				StageInfoBaseDump stage = stages[i];
+				if(stage.getCallId().equals(id)){
+					List<StageInfoBaseDump> clist = stage.getChildrenStages();
+					if(clist == null){
 						clist = new ArrayList<StageInfoBaseDump>();
-					
-					List<StageInfoBaseDump> asyncList = this.getAsyncChildren(id);
-					if(asyncList != null)
-						clist.addAll(asyncList);
-					if(clist.size() > 0)
-						addAsyncSummary(clist.toArray(new StageInfoBaseDump[0]));
+						stage.setChildrenStages(clist);
+					}
+					this.addAndIncreaseAsyncRequestedChildren(stage);
 					return clist.toArray(new StageInfoBaseDump[0]);
 				}
 				else{
-					List<StageInfoBaseDump> slist = t.getChildrenStages();
+					List<StageInfoBaseDump> slist = stage.getChildrenStages();
 					if(slist != null){
 						StageInfoBaseDump[] result = doGetChildrenStages(slist.toArray(new StageInfoBaseDump[0]), id);
 						if(result != null)

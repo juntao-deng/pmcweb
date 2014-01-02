@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.sys.MonitorInfo;
 import net.juniper.jmp.tracer.dumper.info.AbstractDumpObject;
@@ -22,9 +23,9 @@ import org.apache.log4j.Logger;
  */
 public abstract class AbstractMonitorInfoRestService {
 	private Logger logger = Logger.getLogger(AbstractMonitorInfoRestService.class);
-	private Map<String, ThreadInfoDump> asyncIdThreadsMap = new HashMap<String, ThreadInfoDump>();
-	private Map<String, ThreadInfoDump> callIdThreadsMap = new HashMap<String, ThreadInfoDump>();
-	private Map<String, List<StageInfoBaseDump>> attachThreads = new HashMap<String, List<StageInfoBaseDump>>();
+	private static final String ASYNCIDTHREADS = "ASYNCIDTHREADS";
+	private static final String CALLIDTHREADS = "CALLIDTHREADS";
+	private static final String ATTACHTHREADS = "ATTACHTHREADS";
 	
 	/**
 	 * get all serverinfos according to client request
@@ -34,10 +35,15 @@ public abstract class AbstractMonitorInfoRestService {
 	protected List<TargetServerInfo> getServers(String[] ips) {
 		Map<String, TargetServerInfo> serverMap = MonitorInfo.getInstance().getAllServers();
 		List<TargetServerInfo> serverList = new ArrayList<TargetServerInfo>();
+		String sesId = ApiContext.getSessionId();
 		for(String ip : ips) {
 			TargetServerInfo server = serverMap.get(ip);
-			if(server != null)
-				serverList.add(server);
+			if(server != null){
+				if(server.getSessionId() == null || server.getSessionId().equals(sesId))
+					serverList.add(server);
+				else
+					logger.warn("can't monitor ip:" + ip + " for occupied by " + server.getOccupiedBy());
+			}
 		}
 		return serverList;
 	}
@@ -55,9 +61,13 @@ public abstract class AbstractMonitorInfoRestService {
 		}
 	}
 	
-	protected void addAsyncSummary(StageInfoBaseDump[] stageInfoBaseDumps){
-		for(int i = 0; i < stageInfoBaseDumps.length; i ++){
-			StageInfoBaseDump stage = stageInfoBaseDumps[i];
+	/**
+	 * @param stages
+	 */
+	protected void addAsyncSummary(StageInfoBaseDump[] stages){
+		Map<String, List<StageInfoBaseDump>> attachThreads = (Map<String, List<StageInfoBaseDump>>) ApiContext.getGlobalSessionCache().getCache(ATTACHTHREADS);
+		for(int i = 0; i < stages.length; i ++){
+			StageInfoBaseDump stage = stages[i];
 			String callId = stage.getCallId();
 			Iterator<Entry<String, List<StageInfoBaseDump>>> entryIt = attachThreads.entrySet().iterator();
 			while(entryIt.hasNext()){
@@ -70,8 +80,17 @@ public abstract class AbstractMonitorInfoRestService {
 		}
 	}
 	
-	protected List<StageInfoBaseDump> getAsyncChildren(String callId){
-		return attachThreads.get(callId);
+	protected void addAndIncreaseAsyncRequestedChildren(StageInfoBaseDump stage){
+		Map<String, List<StageInfoBaseDump>> attachThreads = (Map<String, List<StageInfoBaseDump>>) ApiContext.getGlobalSessionCache().getCache(ATTACHTHREADS);
+		List<StageInfoBaseDump> attachList = attachThreads.get(stage.getCallId());
+		if(attachList != null){
+			Iterator<StageInfoBaseDump> attachIt = attachList.iterator();
+			while(attachIt.hasNext())
+				stage.addChildStage(attachIt.next());
+		}
+		List<StageInfoBaseDump> clist = stage.getChildrenStages();
+		if(clist.size() > 0)
+			addAsyncSummary(clist.toArray(new StageInfoBaseDump[0]));
 	}
 	
 	private void increaseParent(StageInfoBaseDump stage, List<StageInfoBaseDump> stageList) {
@@ -88,28 +107,34 @@ public abstract class AbstractMonitorInfoRestService {
 	 * @param threadList
 	 */
 	protected void reorganizeAsyncResult(List<ThreadInfoDump> threadList) {
-		asyncIdThreadsMap.clear();
-		callIdThreadsMap.clear();
-		attachThreads.clear();
+		Map<String, ThreadInfoDump> asyncIdThreadsMap = new HashMap<String, ThreadInfoDump>();
+		Map<String, List<StageInfoBaseDump>> attachThreads = new HashMap<String, List<StageInfoBaseDump>>();
+		Map<String, ThreadInfoDump> callIdThreadsMap = new HashMap<String, ThreadInfoDump>();
+		ApiContext.getGlobalSessionCache().addCache(ASYNCIDTHREADS, asyncIdThreadsMap);
+		ApiContext.getGlobalSessionCache().addCache(ATTACHTHREADS, attachThreads);
+		ApiContext.getGlobalSessionCache().addCache(CALLIDTHREADS, callIdThreadsMap);
+		
+		//find all async parent thread
 		Iterator<ThreadInfoDump> it = threadList.iterator();
-		boolean needRemoveEnded = isNeedRemoveEnded();
 		while(it.hasNext()){
 			ThreadInfoDump thread = it.next();
 			if(thread.getAsyncId() != null){
 				asyncIdThreadsMap.put(thread.getAsyncId(), thread);
 				callIdThreadsMap.put(thread.getCallId(), thread);
 			}
-			if(needRemoveEnded && thread.isAlreadyEnded())
-				it.remove();
+//			if(needRemoveEnded && thread.isAlreadyEnded())
+//				it.remove();
 		}
 		
+		//find all async child thread
 		it = threadList.iterator();
 		while(it.hasNext()){
 			ThreadInfoDump thread = it.next();
-			if(thread.getAttachToAsyncId() != null){
-				ThreadInfoDump t = asyncIdThreadsMap.get(thread.getAttachToAsyncId());
+			String attachId = thread.getAttachToAsyncId();
+			if(attachId != null){
+				ThreadInfoDump t = asyncIdThreadsMap.get(attachId);
 				if(t == null){
-					logger.error("can not find owner thread for attach id:" + thread.getAttachToAsyncId());
+					logger.error("can not find owner thread for attach id:" + attachId);
 					continue;
 				}
 				List<StageInfoBaseDump> stageList = attachThreads.get(t.getAsyncCallId());
@@ -118,20 +143,20 @@ public abstract class AbstractMonitorInfoRestService {
 					attachThreads.put(t.getAsyncCallId(), stageList);
 				}
 				stageList.add(thread);
-				it.remove();
 			}
 		}
 		
-		//Get back the removed but effective parent thread
+		boolean needRemoveEnded = isNeedRemoveEnded();
 		if(needRemoveEnded){
-			String[] keys = attachThreads.keySet().toArray(new String[0]);
-			Set<String> keySet = callIdThreadsMap.keySet();
-			for(int i = 0; i < keys.length; i ++){
-				String key = keys[i];
-				if(keySet.contains(key)){
-					ThreadInfoDump thread = callIdThreadsMap.get(key);
-					if(thread.isAlreadyEnded()){
-						threadList.add(thread);
+			Set<String> keys = attachThreads.keySet();
+//			Set<String> keySet = callIdThreadsMap.keySet();
+			it = threadList.iterator();
+			while(it.hasNext()){
+				ThreadInfoDump thread = it.next();
+				if(thread.isAlreadyEnded()){
+					String callId = thread.getCallId();
+					if(!keys.contains(callId) || thread.getAsyncId() != null){
+						it.remove();
 					}
 				}
 			}

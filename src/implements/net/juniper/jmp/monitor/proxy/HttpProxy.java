@@ -59,6 +59,7 @@ public class HttpProxy {
 //		    System.out.println(resp.getStatusLine());
 		    HttpEntity entity = resp.getEntity();
 		    int length = (int) entity.getContentLength();
+		    logger.info("got message for method:" + method + ", length:" + length);
 		    if(length <= 0)
 		    	return null;
 		    

@@ -8,12 +8,26 @@ import java.io.Serializable;
  */
 public class TargetServerInfo implements Serializable {
 	private static final long serialVersionUID = 1565337623763993206L;
+	public static final String FREE = "Free";
 	private Integer id;
 	private String address;
 	private String port;
 	private boolean alive = false;
 	private boolean nodeAlive = false;
-	private String monitoruser = "Free";
+	private String occupiedBy = FREE;
+	private String sessionId;
+	public String getOccupiedBy() {
+		return occupiedBy;
+	}
+	public void setOccupiedBy(String occupiedBy) {
+		this.occupiedBy = occupiedBy;
+	}
+	public String getSessionId() {
+		return sessionId;
+	}
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
 	private int failCount = 0;
 	
 	public Integer getId() {
@@ -52,11 +66,4 @@ public class TargetServerInfo implements Serializable {
 	public void setFailCount(int failCount) {
 		this.failCount = failCount;
 	}
-	public String getMonitoruser() {
-		return monitoruser;
-	}
-	public void setMonitoruser(String monitoruser) {
-		this.monitoruser = monitoruser;
-	}
-	
 }

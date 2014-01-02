@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -62,54 +61,54 @@ public class ThreadInfoRestServiceImpl extends AbstractMonitorInfoRestService im
 		return new PageResult<ThreadInfoDump>(dr);
 	}
 
-	@Override
-	protected void reorganizeAsyncResult(List<ThreadInfoDump> or) {
-		Iterator<ThreadInfoDump> it = or.iterator();
-		Map<String, ThreadInfoDump> asyncThreads = new HashMap<String, ThreadInfoDump>();
-		Map<String, ThreadInfoDump> attachThreads = new HashMap<String, ThreadInfoDump>();
-		while(it.hasNext()){
-			ThreadInfoDump thread = it.next();
-			boolean needRemove = false;
-			if(thread.getAsyncId() != null){
-				if(thread.isAlreadyEnded())
-					needRemove = true;
-				asyncThreads.put(thread.getAsyncId(), thread);
-			}
-			else if(thread.getAttachToAsyncId() != null){
-				needRemove = true;
-				attachThreads.put(thread.getAttachToAsyncId(), thread);
-			}
-			if(needRemove)
-				it.remove();
-		}
-		Iterator<Entry<String, ThreadInfoDump>> attachIt = attachThreads.entrySet().iterator();
-		while(attachIt.hasNext()){
-			Entry<String, ThreadInfoDump> attach = attachIt.next();
-			String attachId = attach.getKey();
-			ThreadInfoDump attachThread = attach.getValue();
-			ThreadInfoDump asyncThread = asyncThreads.get(attachId);
-			if(asyncThread != null){
-				asyncThread.setDuration(asyncThread.getDuration() + attachThread.getDuration());
-				if(asyncThread.isAlreadyEnded() && !or.contains(asyncThread)){
-					or.add(asyncThread);
-				}
-				
-				if(asyncThread.getAsyncCallId().equals(asyncThread.getCallId())){
-					asyncThread.addChildStage(attachThread);
-				}
-				else{
-					List<StageInfoBaseDump> slist = asyncThread.getChildrenStages();
-					if(slist != null){
-						StageInfoBaseDump result = doGetChildrenStage(slist.toArray(new StageInfoBaseDump[0]), asyncThread.getAsyncCallId());
-						if(result != null){
-							result.addChildStage(attachThread);
-						}
-					}
-					
-				}
-			}
-		}
-	}
+//	@Override
+//	protected void reorganizeAsyncResult(List<ThreadInfoDump> or) {
+//		Iterator<ThreadInfoDump> it = or.iterator();
+//		Map<String, ThreadInfoDump> asyncThreads = new HashMap<String, ThreadInfoDump>();
+//		Map<String, ThreadInfoDump> attachThreads = new HashMap<String, ThreadInfoDump>();
+//		while(it.hasNext()){
+//			ThreadInfoDump thread = it.next();
+//			boolean needRemove = false;
+//			if(thread.getAsyncId() != null){
+//				if(thread.isAlreadyEnded())
+//					needRemove = true;
+//				asyncThreads.put(thread.getAsyncId(), thread);
+//			}
+//			else if(thread.getAttachToAsyncId() != null){
+//				needRemove = true;
+//				attachThreads.put(thread.getAttachToAsyncId(), thread);
+//			}
+//			if(needRemove)
+//				it.remove();
+//		}
+//		Iterator<Entry<String, ThreadInfoDump>> attachIt = attachThreads.entrySet().iterator();
+//		while(attachIt.hasNext()){
+//			Entry<String, ThreadInfoDump> attach = attachIt.next();
+//			String attachId = attach.getKey();
+//			ThreadInfoDump attachThread = attach.getValue();
+//			ThreadInfoDump asyncThread = asyncThreads.get(attachId);
+//			if(asyncThread != null){
+//				asyncThread.setDuration(asyncThread.getDuration() + attachThread.getDuration());
+//				if(asyncThread.isAlreadyEnded() && !or.contains(asyncThread)){
+//					or.add(asyncThread);
+//				}
+//				
+//				if(asyncThread.getAsyncCallId().equals(asyncThread.getCallId())){
+//					asyncThread.addChildStage(attachThread);
+//				}
+//				else{
+//					List<StageInfoBaseDump> slist = asyncThread.getChildrenStages();
+//					if(slist != null){
+//						StageInfoBaseDump result = doGetChildrenStage(slist.toArray(new StageInfoBaseDump[0]), asyncThread.getAsyncCallId());
+//						if(result != null){
+//							result.addChildStage(attachThread);
+//						}
+//					}
+//					
+//				}
+//			}
+//		}
+//	}
 
 	private List<ThreadInfoDump> detachResult(List<ThreadInfoDump> result) {
 		List<ThreadInfoDump> infoList = new ArrayList<ThreadInfoDump>();
@@ -168,14 +167,11 @@ public class ThreadInfoRestServiceImpl extends AbstractMonitorInfoRestService im
 				StageInfoBaseDump t = stages[i];
 				if(t.getCallId().equals(id)){
 					List<StageInfoBaseDump> clist = t.getChildrenStages();
-					if(clist == null)
+					if(clist == null){
 						clist = new ArrayList<StageInfoBaseDump>();
-					
-					List<StageInfoBaseDump> asyncList = this.getAsyncChildren(id);
-					if(asyncList != null)
-						clist.addAll(asyncList);
-					if(clist.size() > 0)
-						addAsyncSummary(clist.toArray(new StageInfoBaseDump[0]));
+						t.setChildrenStages(clist);
+					}
+					this.addAndIncreaseAsyncRequestedChildren(t);
 					return clist.toArray(new StageInfoBaseDump[0]);
 				}
 				else{

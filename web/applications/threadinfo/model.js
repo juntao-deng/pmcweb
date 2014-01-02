@@ -33,13 +33,14 @@ wdefine(function(){
 	                                  {name: 'sumStageCount', text:'Stages / Total', width:40, align:"right", formatter: stageFormatter},        
 	                                  {name: 'sumSqlCount', text:'Sqls / Total', width:40, align:"right", formatter: sqlFormatter},
 	                                  {name: 'conns', text:'Db Conns', width:40, align:"right"},
-	                                  {name: 'asyncId', text:'Async', width:40}
+	                                  {name: 'asyncId', text:'Async', width:40},
+	                                  {name: 'asyncCallId', text:'Async Call', width:40}
 	                          	]
 						}
 				);
 	$app.metadata('methodForm', {model: 'threadmodel', rows: 1, elements:[{name:'detachedMethod', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
 	$app.metadata('sqlsForm', {model: 'threadmodel', rows: 1, elements:[{name:'detachedSql', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
-	$app.metadata("serverinput", {label: "Active Nodes:", labelWidth:'90', multiple: true, width: 300});
+	$app.metadata("serverinput", {label: "Active Nodes:", labelWidth:'90', multiple: true, width: 400});
 	
 	$app.model('memmodel', {url:'meminfos', lazyInit: true});
 	$app.model('cpumodel', {url:'cpuinfos', lazyInit: true});
