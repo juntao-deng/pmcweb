@@ -96,6 +96,8 @@ public class ServerInfoServiceImpl implements IServerInfoService {
 			TargetServerInfo cacheServer = getAllServers().get(server.getAddress());
 			server.setAlive(cacheServer.isAlive());
 			server.setNodeAlive(cacheServer.isNodeAlive());
+			server.setSessionId(cacheServer.getSessionId());
+			server.setOccupiedBy(cacheServer.getOccupiedBy());
 		}
 	}
 	@Override
@@ -134,5 +136,20 @@ public class ServerInfoServiceImpl implements IServerInfoService {
 			};
 		}
 		return convertor;
+	}
+
+	@Override
+	public List<TargetServerInfo> getOccupiedAndFreeNodeServers(String sesId) {
+		Map<String, TargetServerInfo> allServers = getAllServers();
+		List<TargetServerInfo> aliveNodeServers = new ArrayList<TargetServerInfo>();
+		Iterator<TargetServerInfo> it = allServers.values().iterator();
+		while(it.hasNext()){
+			TargetServerInfo server = it.next();
+			if(server.isNodeAlive()){
+				if(server.getSessionId() == null || server.getSessionId().equals(sesId))
+					aliveNodeServers.add(server);
+			}
+		}
+		return aliveNodeServers;
 	}
 }

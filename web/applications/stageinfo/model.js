@@ -27,7 +27,8 @@ wdefine(function(){
 	                                  {name: 'sumStageCount', text:'Sum Stages', width:40, align:"right", formatter: stageFormatter},        
 	                                  {name: 'sumSqlCount', text:'Sum Sqls', width:40, align:"right", formatter: sqlFormatter},
 	                                  {name: 'conns', text:'Db Conns', width:40, align:"right"},
-	                                  {name: 'attachToAsyncId', text:'Attach', width:40}
+	                                  {name: 'attachToAsyncId', text:'Attach', width:40},
+	                                  {name: 'async', text:'Async', width:40}
 	                          	]
 						}
 				);

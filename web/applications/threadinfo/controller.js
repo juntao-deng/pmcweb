@@ -119,7 +119,12 @@ wdefine(function(){
 			}
 			$app.component('serverinput').datas(options);
 			if(options.length > 0){
-				$app.component('serverinput').value(options[0].value);
+				var values = [];
+				for(var i = 0; i < data.length; i ++){
+					if(data[i].sessionId != null)
+						values.push(data[i].address);
+				}
+				$app.component('serverinput').value(values);
 			}
 		}
 	});

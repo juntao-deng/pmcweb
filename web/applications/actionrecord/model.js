@@ -31,11 +31,12 @@ wdefine(function(){
 	                                  //{name: 'responseBytes', text:'Down Bytes', width:40, align:"right", formatter:"int"},
 	                                  {name: 'sumStageCount', text:'Sum Stages', width:40, align:"right", formatter: stageFormatter},        
 	                                  {name: 'sumSqlCount', text:'Sum Sqls', width:40, align:"right", formatter: sqlFormatter},
-	                                  {name: 'conns', text:'Db Conns', width:40, align:"right"}
+	                                  {name: 'conns', text:'Db Conns', width:40, align:"right"},
+	                                  {name: 'async', text:'Async', width:40}
 	                          	]
 						}
 				);
 	$app.metadata('methodForm', {model: 'threadmodel', rows: 1, elements:[{name:'detachedMethod', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
 	$app.metadata('sqlsForm', {model: 'threadmodel', rows: 1, elements:[{name:'detachedSql', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
-	$app.metadata("serverinput", {label: "Active Nodes:", labelWidth:'90', multiple: true, width: 300});
+	$app.metadata("serverinput", {label: "Active Nodes:", labelWidth:'90', multiple: true, width: 400});
 });

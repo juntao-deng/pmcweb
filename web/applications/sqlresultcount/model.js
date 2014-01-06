@@ -18,10 +18,11 @@ wdefine(function(){
 	                                  {name: 'stagePath', text:'Req Path', width:90},
 	                                  {name: 'stageMethod', text:'Req Method', width:60},
 	                                  {name: 'resultCount', text:'Result Count', width:40, align:"right"},        
-	                                  {name: 'sql', text:'Sql', width:100, align:"right"}
+	                                  {name: 'sql', text:'Sql', width:100, align:"right"},
+	                                  {name: 'async', text:'Async', width:40}
 	                          	]
 						}
 				);
 	$app.metadata('sqlsForm', {model: 'threadmodel', rows: 1, elements:[{name:'sql', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
-	$app.metadata("serverinput", {label: "Active Nodes:", labelWidth:'90', multiple: true, width: 300});
+	$app.metadata("serverinput", {label: "Active Nodes:", labelWidth:'90', multiple: true, width: 400});
 });

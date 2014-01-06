@@ -44,7 +44,33 @@ public class ServerInfoRestServiceImpl implements ServerInfoRestService {
 		if(action.equals("getServerList")){
 			String aliveNode = form.getFirst("aliveNode");
 			if(aliveNode != null && aliveNode.equals("true")){
-				return service.getAliveNodeServers();
+				return service.getOccupiedAndFreeNodeServers(ApiContext.getSessionId());
+			}
+		}
+		else if(action.equals("occupy")){
+			String serverStr = form.getFirst("serveriplist");
+			String[] servers = serverStr.split(",");
+			String sesId = ApiContext.getSessionId();
+			String clientIp = ApiContext.getClientInfo().getClientIp();
+			Map<String, TargetServerInfo> serverMap = MonitorInfo.getInstance().getAllServers();
+			for(String ip : servers) {
+				TargetServerInfo server = serverMap.get(ip);
+				if(server != null){
+					server.setOccupiedBy(clientIp);
+					server.setSessionId(sesId);
+				}
+			}
+		}
+		else if(action.equals("release")){
+			String serverStr = form.getFirst("serveriplist");
+			String[] servers = serverStr.split(",");
+			Map<String, TargetServerInfo> serverMap = MonitorInfo.getInstance().getAllServers();
+			for(String ip : servers) {
+				TargetServerInfo server = serverMap.get(ip);
+				if(server != null){
+					server.setOccupiedBy(TargetServerInfo.FREE);
+					server.setSessionId(null);
+				}
 			}
 		}
 		return null;

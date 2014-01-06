@@ -17,6 +17,7 @@ public interface IServerInfoService {
 	public Map<String, TargetServerInfo> getAllServers();
 	public Page<TargetServerInfo> getServers(PagingContext pagingContext);
 	public List<TargetServerInfo> getAliveNodeServers();
+	public List<TargetServerInfo> getOccupiedAndFreeNodeServers(String sesId);
 	public TargetServerInfo saveServer(TargetServerInfo server);
 	public TargetServerInfo updateServer(TargetServerInfo server);
 	public void deleteServer(Integer id);

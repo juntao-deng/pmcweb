@@ -11,7 +11,8 @@ wdefine(function(){
 	                                         {name: 'sumSqlCount', label: 'Sum Sqls:', nextrow : false, rowSpan : 1, editorType:'input'},
 	                                         {name: 'stages', label: 'Stages:', nextrow : false, rowSpan : 1, editorType:'input'},
 	                                         {name: 'sqls', label: 'Sqls:', nextrow : false, rowSpan : 1, editorType:'input'},
-	                                         {name: 'conns', label: 'conns:', nextrow : false, rowSpan : 1, editorType:'input'}
+	                                         {name: 'conns', label: 'conns:', nextrow : false, rowSpan : 1, editorType:'input'},
+	                                         {name: 'async', text:'Async', width:40}
 	                                        ]
 								}
 				);

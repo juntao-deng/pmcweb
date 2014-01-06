@@ -222,9 +222,4 @@ public class ThreadInfoRestServiceImpl extends AbstractMonitorInfoRestService im
 		}
 		return null;
 	}
-	
-	@Override
-	protected boolean isNeedRemoveEnded() {
-		return true;
-	}
 }

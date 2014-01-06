@@ -19,6 +19,7 @@ public class ServerStateThread implements Runnable {
 	private IServerInfoService serverService = ServiceLocator.getService(IServerInfoService.class);
 	@Override
 	public void run() {
+		while(true){
 			try{
 				TargetServerInfo[] servers = serverService.getAllServers().values().toArray(new TargetServerInfo[0]);
 				if(servers.length > 0){
@@ -43,6 +44,7 @@ public class ServerStateThread implements Runnable {
 					logger.error(e.getMessage(), e);
 				}
 			}
+		}
 	}
 }
 
