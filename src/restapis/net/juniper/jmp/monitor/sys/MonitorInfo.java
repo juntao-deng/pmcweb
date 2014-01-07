@@ -1,6 +1,7 @@
 package net.juniper.jmp.monitor.sys;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -40,5 +41,17 @@ public class MonitorInfo {
 	}
 	public void setAllServers(Map<String, TargetServerInfo> allServers) {
 		this.allServers = allServers;
+	}
+	public void removeServerById(Integer id) {
+		List<TargetServerInfo> serverList = getAllServersList();
+		if(serverList == null)
+			return;
+		Iterator<TargetServerInfo> sit = serverList.iterator();
+		while(sit.hasNext()){
+			TargetServerInfo server = sit.next();
+			if(server.getId().equals(id)){
+				allServers.remove(server.getAddress());
+			}
+		}
 	}
 }

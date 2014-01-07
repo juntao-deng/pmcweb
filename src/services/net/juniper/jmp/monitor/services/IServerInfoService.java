@@ -21,4 +21,5 @@ public interface IServerInfoService {
 	public TargetServerInfo saveServer(TargetServerInfo server);
 	public TargetServerInfo updateServer(TargetServerInfo server);
 	public void deleteServer(Integer id);
+	public void deleteServers(Integer[] intIds);
 }

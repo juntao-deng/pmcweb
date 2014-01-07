@@ -1,4 +1,7 @@
 wdefine(function(){
+	$(window).unload(function(){
+		
+	});
 	$(window).resize(function() {
 		resizeSideBar();
 	});

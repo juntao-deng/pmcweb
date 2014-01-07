@@ -70,11 +70,13 @@ public abstract class AbstractMonitorInfoRestService {
 				continue;
 			String callId = stage.getCallId();
 			Map<String, List<StageInfoBaseDump>> attachThreads = (Map<String, List<StageInfoBaseDump>>) ApiContext.getGlobalSessionCache().getCache(ATTACHTHREADS);
+			boolean async = hasAsynChildren(stage, attachThreads);
+			stage.setAsync(async);
+			
 			List<StageInfoBaseDump> cStageList = attachThreads.get(callId);
 			if(cStageList != null){
 				addAsyncSummary(cStageList.toArray(new StageInfoBaseDump[0]));
 				increaseParent(stage, cStageList);
-				stage.setAsync(true);
 			}
 //			Iterator<Entry<String, List<StageInfoBaseDump>>> entryIt = attachThreads.entrySet().iterator();
 //			while(entryIt.hasNext()){
@@ -88,6 +90,15 @@ public abstract class AbstractMonitorInfoRestService {
 		}
 	}
 	
+	private boolean hasAsynChildren(StageInfoBaseDump stage, Map<String, List<StageInfoBaseDump>> attachThreads) {
+		String[] keys = attachThreads.keySet().toArray(new String[0]);
+		for(int i = 0; i < keys.length; i ++){
+			if(keys[i].startsWith(stage.getCallId()))
+				return true;
+		}
+		return false;
+	}
+
 	protected void addAndIncreaseAsyncRequestedChildren(StageInfoBaseDump stage){
 		Map<String, List<StageInfoBaseDump>> attachThreads = (Map<String, List<StageInfoBaseDump>>) ApiContext.getGlobalSessionCache().getCache(ATTACHTHREADS);
 		List<StageInfoBaseDump> attachList = attachThreads.get(stage.getCallId());
@@ -141,6 +152,8 @@ public abstract class AbstractMonitorInfoRestService {
 					logger.error("can not find owner thread for attach id:" + attachId);
 					continue;
 				}
+				
+				logger.error("======== find owner thread for attach id:" + attachId);
 				List<StageInfoBaseDump> stageList = attachThreads.get(t.getAsyncCallId());
 				if(stageList == null){
 					stageList = new ArrayList<StageInfoBaseDump>();

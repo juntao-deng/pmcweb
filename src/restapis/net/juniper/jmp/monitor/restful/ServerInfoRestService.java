@@ -1,5 +1,6 @@
 package net.juniper.jmp.monitor.restful;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -35,10 +36,10 @@ public interface ServerInfoRestService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public TargetServerInfo addServerInfo(TargetServerInfo device);
  
-	@PUT
+	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void deleteServerInfo(@PathParam("id") Integer id);
+	public void deleteServerInfo(@PathParam("id") String id);
 	
 	@POST
 	@Path("/action/{action}")

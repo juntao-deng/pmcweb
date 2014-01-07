@@ -104,6 +104,14 @@ public class ServerInfoServiceImpl implements IServerInfoService {
 	public void deleteServer(Integer id) {
 		serverRep.delete(id);
 	}
+	
+	@Override
+	public void deleteServers(Integer[] ids) {
+		for(int i = 0; i < ids.length; i ++){
+			MonitorInfo.getInstance().removeServerById(ids[i]);
+			serverRep.delete(ids[i]);
+		}
+	}
 
 	@Override
 	public List<TargetServerInfo> getAliveNodeServers() {

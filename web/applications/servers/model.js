@@ -11,9 +11,9 @@ wdefine(function(){
                  ]}
 	);
 	$app.metadata('top_menu', {groups: [
-	                                         {menus : [{id:'add',tip:'Add', icon:'icon-plus'}, 
-	                                                   {id:'edit',tip:'Edit', icon: 'icon-edit', statemgr: FwBase.Wtf.View.S_StateMgr}, 
-	                                                   {id:'del',tip:'Delete', icon:'icon-remove', statemgr: FwBase.Wtf.View.M_StateMgr}
+	                                         {menus : [{id:'add',tip:'Add', icon:'icon-plus', action: {func: FwBase.Wtf.UIPattern.Action.AddAction, params: {width: 400, height: 250, title: 'Add Server'}}}, 
+	                                                   {id:'edit',tip:'Edit', icon: 'icon-edit', statemgr: FwBase.Wtf.View.S_StateMgr, action: {func: FwBase.Wtf.UIPattern.Action.EditAction, params: {width: 400, height: 250, title: 'Edit Server'}}}, 
+	                                                   {id:'del',tip:'Delete', icon:'icon-remove', statemgr: FwBase.Wtf.View.M_StateMgr, action: FwBase.Wtf.UIPattern.Action.DelAction}
 	                                                  ]},
 	                                         {menus : [{id:'occupy', name:'Occupy', statemgr: FwBase.Wtf.View.M_StateMgr}, {id:'release', name:'Release', statemgr: FwBase.Wtf.View.M_StateMgr}]},
 	                                         {menus : [{id:'tagsitem',tip:'Show/Hide Tags', icon:'icon-tags'}, {id:'summaryitem',tip:'Show/Hide Summary', icon: 'icon-tasks'}]},

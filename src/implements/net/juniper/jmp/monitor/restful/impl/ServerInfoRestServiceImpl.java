@@ -89,8 +89,13 @@ public class ServerInfoRestServiceImpl implements ServerInfoRestService {
 	}
 
 	@Override
-	public void deleteServerInfo(Integer id) {
-		
+	public void deleteServerInfo(String id) {
+		String[] ids = id.split(",");
+		Integer[] intIds = new Integer[ids.length];
+		for(int i = 0; i < ids.length; i ++){
+			intIds[i] = Integer.parseInt(ids[i]);
+		}
+		service.deleteServers(intIds);
 	}
 
 }
