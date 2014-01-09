@@ -8,10 +8,11 @@ wdefine(function(){
 	}
 	$app.metadata('useridinput', {label: 'User Id:', labelWidth: '50', hint: '', width: 60, defaultValue: 'super'});
 	$app.metadata('operationmenu', {groups: [
-	                                         {menus : [{id:'play', icon:'icon-play', name: ''}, 
-	                                                   {id:'stop', icon: 'icon-stop', name: '', enable: false},
-	                                                   {id:'export', icon: 'icon-download', name: 'Export', statemgr: FwBase.Wtf.View.M_StateMgr},
-	                                                   {id:'stages', icon: 'icon-edit', name: 'Stages', statemgr: 'FwBase.Wtf.View.S_StateMgr'}
+	                                         {menus : [{id:'play', icon:'icon-play', tip: 'Start'}, 
+	                                                   {id:'stop', icon: 'icon-stop', tip: 'Stop', enable: false},
+	                                                   {id:'detail', icon:'icon-list-alt', tip: 'Details', statemgr: FwBase.Wtf.View.S_StateMgr},
+	                                                   {id:'export', icon: 'icon-download', tip: 'Export', statemgr: FwBase.Wtf.View.M_StateMgr},
+	                                                   {id:'stages', icon: 'icon-edit', tip: 'Stages', statemgr: 'FwBase.Wtf.View.S_StateMgr'}
 	                                         		  ]
 	                                         }
 	                                        ]

@@ -8,9 +8,10 @@ wdefine(function(){
 	}
 	$app.metadata('startts', {label: 'Time From', labelWidth: '80', hint: '', width: 100});
 	$app.metadata('operationmenu', {groups: [
-	                                         {menus : [{id:'fetch', icon:'icon-refresh', name: 'Fetch'}, 
-	                                                   {id:'export', icon: 'icon-download', name: 'Export', statemgr: FwBase.Wtf.View.M_StateMgr},
-	                                                   {id:'stages', icon: 'icon-edit', name: 'Stages', statemgr: FwBase.Wtf.View.S_StateMgr}
+	                                         {menus : [{id:'fetch', icon:'icon-refresh', tip: 'Fetch'}, 
+	                                                   {id:'detail', icon:'icon-list-alt', tip: 'Details', statemgr: FwBase.Wtf.View.S_StateMgr},
+	                                                   {id:'export', icon: 'icon-download', tip: 'Export', statemgr: FwBase.Wtf.View.M_StateMgr},
+	                                                   {id:'stages', icon: 'icon-edit', tip: 'Stages', statemgr: FwBase.Wtf.View.S_StateMgr}
 	                                         		  ]
 	                                         }
 	                                        ]
@@ -37,5 +38,5 @@ wdefine(function(){
 				);
 	$app.metadata('methodForm', {model: 'threadmodel', rows: 1, elements:[{name:'detachedMethod', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
 	$app.metadata('sqlsForm', {model: 'threadmodel', rows: 1, elements:[{name:'detachedSql', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
-	$app.metadata("serverinput", {label: "Active Node:", labelWidth:'90', multiple: true, width: 400});
+	$app.metadata("serverinput", {label: "Nodes:", labelWidth:'40', multiple: true, width: 380});
 });

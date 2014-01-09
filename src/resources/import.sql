@@ -12,5 +12,6 @@ INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.010','020','Thre
 INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.020','020','Thread db conns list','Y','monitor/tdbconns');
 INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.030','020','Thread sql count list','Y','monitor/tsqlcount');
 INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.040','020','Thread stage count list','Y','monitor/tstagescount');
+INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.050','020','Thread Async list','Y','monitor/tasync');
 INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.110','020','Sql duration list ','Y','monitor/sqlduration');
 INSERT INTO wtf_navitem (id,groupId,name,target,url) VALUES ('2.120','020','Sql result count list','Y','monitor/sqlresultcount');

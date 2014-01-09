@@ -1,13 +1,7 @@
 package net.juniper.jmp.monitor.mo.info;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-/**
- * 
- * @author juntaod
- *
- */
 /**
  * 
  * @author juntaod

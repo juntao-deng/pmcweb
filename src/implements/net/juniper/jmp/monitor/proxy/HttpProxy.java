@@ -24,7 +24,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 /**
- * 
+ * Http Proxy for remote calling, using Java Dynamic proxy will be much better
  * @author juntaod
  *
  */
@@ -46,7 +46,6 @@ public class HttpProxy {
 			timeout = DEFAULT_TIMEOUT;
 		Builder builder = RequestConfig.custom();
 		builder.setConnectTimeout(timeout);
-//		builder.setConnectTimeout(timeout);
 		builder.setConnectionRequestTimeout(timeout);
 		builder.setSocketTimeout(timeout);
 		httpPost.setConfig(builder.build());
@@ -56,7 +55,6 @@ public class HttpProxy {
 		CloseableHttpResponse resp = null;
 		try {
 			resp = httpclient.execute(httpPost);
-//		    System.out.println(resp.getStatusLine());
 		    HttpEntity entity = resp.getEntity();
 		    int length = (int) entity.getContentLength();
 		    logger.info("got message for method:" + method + ", length:" + length);
@@ -65,22 +63,20 @@ public class HttpProxy {
 		    
 		    ObjectInputStream oin = new ObjectInputStream(entity.getContent());
 		    Object result = oin.readObject();
-		    // do something useful with the response body
-		    // and ensure it is fully consumed
 		    EntityUtils.consume(entity);
 		    return result;
 		}
 		catch(NoRouteToHostException e){
-			logger.error("Connect timeout for url:" + targetUrl);
+			logger.error("NoRouteToHostException for url:" + targetUrl);
 		}
 		catch(ConnectTimeoutException e){
 			logger.error("Connect timeout for url:" + targetUrl);
 		}
 		catch(HttpHostConnectException e){
-			logger.error("Connect timeout for url:" + targetUrl);
+			logger.error("HttpHostConnectException for url:" + targetUrl);
 		}
 		catch(SocketTimeoutException e){
-			logger.error("Connect timeout for url:" + targetUrl);
+			logger.error("SocketTimeoutException for url:" + targetUrl);
 		}
 		catch(Exception e){
 			logger.error(e.getMessage(), e);

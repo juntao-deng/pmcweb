@@ -1,7 +1,11 @@
 package net.juniper.jmp.monitor.core;
 
 import java.io.Serializable;
-
+/**
+ * Invocation information for remote call
+ * @author juntaod
+ *
+ */
 public class InvocationInfo implements Serializable{
 	private static final long serialVersionUID = 7430333307121219687L;
 	private String method;

@@ -17,7 +17,11 @@ import net.juniper.jmp.monitor.restful.CpuInfoRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.monitor.sys.MonitorInfo;
 import net.juniper.jmp.tracer.info.CpuInfo;
-
+/**
+ * 
+ * @author juntaod
+ *
+ */
 public class CpuInfoRestServiceImpl implements CpuInfoRestService {
 	private IClientInfoService service = ServiceLocator.getService(IClientInfoService.class);
 	private static Map<String, CpuSummary> cacheMap = new ConcurrentHashMap<String, CpuSummary>();

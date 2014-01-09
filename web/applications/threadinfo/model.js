@@ -10,9 +10,10 @@ wdefine(function(){
 	$app.metadata('autorefresh', {label: 'Refresh:', labelWidth: '50', defaultValue: false});
 	$app.metadata('refreshinterval', {label: '&nbsp;&nbsp;Every:', labelWidth: '40', hint: 'Sec(s)', width: 20, defaultValue: 10, editable: false});
 	$app.metadata('operationmenu', {groups: [
-	                                         {menus : [{id:'refresh', icon:'icon-refresh', name: 'Refresh'}, 
-	                                                   {id:'export', icon: 'icon-download', name: 'Export', statemgr: FwBase.Wtf.View.M_StateMgr},
-	                                                   {id:'stages', icon: 'icon-edit', name: 'Stages', statemgr: FwBase.Wtf.View.S_StateMgr}
+	                                         {menus : [{id:'refresh', icon:'icon-refresh', tip: 'Refresh'},
+	                                                   {id:'detail', icon:'icon-list-alt', tip: 'Details', statemgr: FwBase.Wtf.View.S_StateMgr},
+	                                                   {id:'export', icon: 'icon-download', tip: 'Export', statemgr: FwBase.Wtf.View.M_StateMgr},
+	                                                   {id:'stages', icon: 'icon-edit', tip: 'Stages', statemgr: FwBase.Wtf.View.S_StateMgr}
 	                                         		  ]
 	                                         }
 	                                        ]
@@ -39,7 +40,7 @@ wdefine(function(){
 				);
 	$app.metadata('methodForm', {model: 'threadmodel', rows: 1, elements:[{name:'detachedMethod', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
 	$app.metadata('sqlsForm', {model: 'threadmodel', rows: 1, elements:[{name:'detachedSql', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
-	$app.metadata("serverinput", {label: "Active Nodes:", labelWidth:'90', multiple: true, width: 400});
+	$app.metadata("serverinput", {label: "Nodes:", labelWidth:'40', multiple: true, width: 400});
 	
 	$app.model('memmodel', {url:'meminfos', lazyInit: true});
 	$app.model('cpumodel', {url:'cpuinfos', lazyInit: true});

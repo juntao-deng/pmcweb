@@ -45,6 +45,11 @@ wdefine(function(){
 			var row = this.ctx.model('threadmodel').selections().rows[0];
 			AppUtil.navigateToStack("monitor/stageinfo", {navId: row.id, urlBase: 'threadinfosaction'}, {title: "Stage Information"});
 		}
+		
+		else if(options.trigger.id == 'detail'){
+			var row = this.ctx.model('threadmodel').selections().rows[0];
+			openSummary(row.id);
+		}
 	});
 	
 	function doFetch() {
@@ -56,11 +61,14 @@ wdefine(function(){
 		model.reqParam("ips", servers.join(","));
 		model.reload();
 	}
-	
+
 	$app.component('threadgrid').on('dblclick', function(options){
-		AppUtil.navigateToDialog("monitor/threadsummary", {itemId: options.rowId, urlBase: 'threadinfosaction'}, {title: "Thread Summary", width: "800", height: "500"});
+		openSummary(options.rowId);
 	});
 	
+	function openSummary(itemId){
+		AppUtil.navigateToDialog("monitor/threadsummary", {itemId: itemId, urlBase: 'threadinfosaction'}, {title: "Thread Summary", width: "800", height: "500"});
+	}
 	RestApi.action({
 		restUrl: 'serverinfos',
 		actionName: 'getServerList',

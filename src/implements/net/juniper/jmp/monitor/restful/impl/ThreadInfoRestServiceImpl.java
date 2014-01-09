@@ -26,13 +26,14 @@ import net.juniper.jmp.tracer.dumper.info.ThreadInfoDump;
  */
 public class ThreadInfoRestServiceImpl extends AbstractMonitorInfoRestService implements ThreadInfoRestService{
 	private static final String THREADINFOS = "threadinfos";
-	private IClientInfoService service = ServiceLocator.getService(IClientInfoService.class);
+	private IClientInfoService clientService = ServiceLocator.getService(IClientInfoService.class);
+	
 	@Override
 	public PageResult<ThreadInfoDump> getThreadInfos() {
 		String ipstr = ApiContext.getParameter("ips");
 		String[] ips = ipstr.split(",");
 		List<TargetServerInfo> servers = getServers(ips);
-		Map<TargetServerInfo, Object> reqResults = service.getThreadInfos(servers);
+		Map<TargetServerInfo, Object> reqResults = clientService.getThreadInfos(servers);
 		List<ThreadInfoDump> or = new ArrayList<ThreadInfoDump>();
 		Iterator<Entry<TargetServerInfo, Object>> it = reqResults.entrySet().iterator();
 		while(it.hasNext()){
@@ -42,8 +43,8 @@ public class ThreadInfoRestServiceImpl extends AbstractMonitorInfoRestService im
 				or.addAll(Arrays.asList(result));
 			}
 		}
-		reorganizeAsyncResult(or);
-		addAsyncSummary(or.toArray(new StageInfoBaseDump[0]));
+//		reorganizeAsyncResult(or);
+//		addAsyncSummary(or.toArray(new StageInfoBaseDump[0]));
 		
 		List<ThreadInfoDump> dr = new ArrayList<ThreadInfoDump>();
 		dr.addAll(detachResult(or));
@@ -171,7 +172,7 @@ public class ThreadInfoRestServiceImpl extends AbstractMonitorInfoRestService im
 						clist = new ArrayList<StageInfoBaseDump>();
 						t.setChildrenStages(clist);
 					}
-					this.addAndIncreaseAsyncRequestedChildren(t);
+//					this.addAndIncreaseAsyncRequestedChildren(t);
 					return clist.toArray(new StageInfoBaseDump[0]);
 				}
 				else{
@@ -207,8 +208,7 @@ public class ThreadInfoRestServiceImpl extends AbstractMonitorInfoRestService im
 		return null;
 	}
 
-	@Override
-	protected StageInfoBaseDump doGetChildrenStage(StageInfoBaseDump[] slist, String sid) {
+	private StageInfoBaseDump doGetChildrenStage(StageInfoBaseDump[] slist, String sid) {
 		for(int i = 0; i < slist.length; i ++){
 			StageInfoBaseDump s = slist[i];
 			if(s.getCallId().equals(sid))
@@ -222,4 +222,5 @@ public class ThreadInfoRestServiceImpl extends AbstractMonitorInfoRestService im
 		}
 		return null;
 	}
+	
 }

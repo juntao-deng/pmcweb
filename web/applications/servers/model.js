@@ -15,7 +15,7 @@ wdefine(function(){
 	                                                   {id:'edit',tip:'Edit', icon: 'icon-edit', statemgr: FwBase.Wtf.View.S_StateMgr, action: {func: FwBase.Wtf.UIPattern.Action.EditAction, params: {width: 400, height: 250, title: 'Edit Server'}}}, 
 	                                                   {id:'del',tip:'Delete', icon:'icon-remove', statemgr: FwBase.Wtf.View.M_StateMgr, action: FwBase.Wtf.UIPattern.Action.DelAction}
 	                                                  ]},
-	                                         {menus : [{id:'occupy', name:'Occupy', statemgr: FwBase.Wtf.View.M_StateMgr}, {id:'release', name:'Release', statemgr: FwBase.Wtf.View.M_StateMgr}]},
+	                                         {menus : [{id:'occupy', tip:'Occupy', icon:'icon-star', statemgr: FwBase.Wtf.View.M_StateMgr}, {id:'release', tip:'Release', icon:'icon-star-empty', statemgr: FwBase.Wtf.View.M_StateMgr}]},
 	                                         {menus : [{id:'tagsitem',tip:'Show/Hide Tags', icon:'icon-tags'}, {id:'summaryitem',tip:'Show/Hide Summary', icon: 'icon-tasks'}]},
 	                                         {menus : [{id:'actions',name:'Actions', 
 	                                        	 menus:[{id:'export', name:'Export', icon:'icon-arrow-down'}, {id:'import', name:'Import', icon:'icon-arrow-up'}, {divider:true}, {id:'more', name:'More', icon: 'icon-list', 

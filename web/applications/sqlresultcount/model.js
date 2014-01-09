@@ -1,9 +1,9 @@
 wdefine(function(){
 	$app.metadata('startts', {label: 'Time From', labelWidth: '80', hint: '', width: 100});
 	$app.metadata('operationmenu', {groups: [
-	                                         {menus : [{id:'fetch', icon:'icon-refresh', name: 'Fetch'}, 
-	                                                   {id:'export', icon: 'icon-download', name: 'Export', statemgr: FwBase.Wtf.View.M_StateMgr},
-	                                                   {id:'stage', icon: 'icon-edit', name: 'View Stage', statemgr: FwBase.Wtf.View.S_StateMgr}
+	                                         {menus : [{id:'fetch', icon:'icon-refresh', tip: 'Fetch'}, 
+	                                                   {id:'export', icon: 'icon-download', tip: 'Export', statemgr: FwBase.Wtf.View.M_StateMgr},
+	                                                   {id:'stage', icon: 'icon-edit', tip: 'View Stage', statemgr: FwBase.Wtf.View.S_StateMgr}
 	                                         		  ]
 	                                         }
 	                                        ]
@@ -24,5 +24,5 @@ wdefine(function(){
 						}
 				);
 	$app.metadata('sqlsForm', {model: 'threadmodel', rows: 1, elements:[{name:'sql', width: '100%', height: '200', editable: false, theme: 'default', editorType: 'input_highlight'}]});
-	$app.metadata("serverinput", {label: "Active Nodes:", labelWidth:'90', multiple: true, width: 400});
+	$app.metadata("serverinput", {label: "Nodes:", labelWidth:'40', multiple: true, width: 400});
 });

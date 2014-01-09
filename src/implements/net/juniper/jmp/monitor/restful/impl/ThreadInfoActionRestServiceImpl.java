@@ -160,8 +160,7 @@ public class ThreadInfoActionRestServiceImpl extends AbstractMonitorInfoRestServ
 		return null;
 	}
 
-	@Override
-	protected StageInfoBaseDump doGetChildrenStage(StageInfoBaseDump[] slist, String sid) {
+	private StageInfoBaseDump doGetChildrenStage(StageInfoBaseDump[] slist, String sid) {
 		for(int i = 0; i < slist.length; i ++){
 			StageInfoBaseDump s = slist[i];
 			if(s.getCallId().equals(sid))

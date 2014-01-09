@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import net.juniper.jmp.core.ctx.ApiContext;
@@ -70,14 +71,34 @@ public abstract class AbstractMonitorInfoRestService {
 				continue;
 			String callId = stage.getCallId();
 			Map<String, List<StageInfoBaseDump>> attachThreads = (Map<String, List<StageInfoBaseDump>>) ApiContext.getGlobalSessionCache().getCache(ATTACHTHREADS);
-			boolean async = hasAsynChildren(stage, attachThreads);
-			stage.setAsync(async);
+
+			List<String> firstLevelKeys = new ArrayList<String>();
 			
-			List<StageInfoBaseDump> cStageList = attachThreads.get(callId);
-			if(cStageList != null){
-				addAsyncSummary(cStageList.toArray(new StageInfoBaseDump[0]));
-				increaseParent(stage, cStageList);
+			Iterator<Entry<String, List<StageInfoBaseDump>>> entryIt = attachThreads.entrySet().iterator();
+			while(entryIt.hasNext()){
+				Entry<String, List<StageInfoBaseDump>> entry = entryIt.next();
+				String key = entry.getKey();
+				if(key.startsWith(callId)){
+					List<StageInfoBaseDump> cStageList = entry.getValue();
+					addAsyncSummary(cStageList.toArray(new StageInfoBaseDump[0]));
+					firstLevelKeys.add(key);
+					if(key.equals(callId)){
+						stage.setStages(stage.getStages() + cStageList.size());
+					}
+				}
 			}
+			if(firstLevelKeys.size() > 0){
+				calculateFirstLevel(firstLevelKeys);
+				Iterator<String> keyIt = firstLevelKeys.iterator();
+				while(keyIt.hasNext()){
+					List<StageInfoBaseDump> cStageList = attachThreads.get(keyIt.next());
+					increaseParent(stage, cStageList);
+				}
+			}
+//			List<StageInfoBaseDump> cStageList = attachThreads.get(callId);
+//			if(cStageList != null){
+//				addAsyncSummary(cStageList.toArray(new StageInfoBaseDump[0]));
+//			}
 //			Iterator<Entry<String, List<StageInfoBaseDump>>> entryIt = attachThreads.entrySet().iterator();
 //			while(entryIt.hasNext()){
 //				Entry<String, List<StageInfoBaseDump>> entry = entryIt.next();
@@ -90,13 +111,30 @@ public abstract class AbstractMonitorInfoRestService {
 		}
 	}
 	
-	private boolean hasAsynChildren(StageInfoBaseDump stage, Map<String, List<StageInfoBaseDump>> attachThreads) {
-		String[] keys = attachThreads.keySet().toArray(new String[0]);
-		for(int i = 0; i < keys.length; i ++){
-			if(keys[i].startsWith(stage.getCallId()))
-				return true;
+//	private boolean hasAsynChildren(StageInfoBaseDump stage, Map<String, List<StageInfoBaseDump>> attachThreads) {
+//		String[] keys = attachThreads.keySet().toArray(new String[0]);
+//		for(int i = 0; i < keys.length; i ++){
+//			if(keys[i].startsWith(stage.getCallId()))
+//				return true;
+//		}
+//		return false;
+//	}
+
+	private void calculateFirstLevel(List<String> firstLevelKeys) {
+		List<String> removeKeys = new ArrayList<String>();
+		int size = firstLevelKeys.size();
+		for(int i = 0; i < size; i ++){
+			String key = firstLevelKeys.get(i);
+			Iterator<String> keyIt = firstLevelKeys.iterator();
+			while(keyIt.hasNext()){
+				String k = keyIt.next();
+				if(!key.equals(k) && key.startsWith(k)){
+					removeKeys.add(key);
+					break;
+				}
+			}
 		}
-		return false;
+		firstLevelKeys.removeAll(removeKeys);
 	}
 
 	protected void addAndIncreaseAsyncRequestedChildren(StageInfoBaseDump stage){
@@ -116,6 +154,7 @@ public abstract class AbstractMonitorInfoRestService {
 			StageInfoBaseDump cstage = stageIt.next();
 			currStage.setSumSqlCount(currStage.getSumSqlCount() + cstage.getSumSqlCount());
 			currStage.setSumStageCount(currStage.getSumStageCount() + cstage.getSumStageCount() + 1);
+			currStage.setDuration(currStage.getDuration() + cstage.getDuration());
 		}
 	}
 
@@ -154,19 +193,17 @@ public abstract class AbstractMonitorInfoRestService {
 				}
 				
 				logger.error("======== find owner thread for attach id:" + attachId);
-				List<StageInfoBaseDump> stageList = attachThreads.get(t.getAsyncCallId());
+				String parentCallId = t.getAsyncCallId();
+				List<StageInfoBaseDump> stageList = attachThreads.get(parentCallId);
 				if(stageList == null){
 					stageList = new ArrayList<StageInfoBaseDump>();
-					attachThreads.put(t.getAsyncCallId(), stageList);
+					attachThreads.put(parentCallId, stageList);
 				}
 				stageList.add(thread);
 			}
 		}
 		
-//		boolean needRemoveEnded = isNeedRemoveEnded();
-//		if(needRemoveEnded){
 		Set<String> keys = attachThreads.keySet();
-//			Set<String> keySet = callIdThreadsMap.keySet();
 		it = threadList.iterator();
 		while(it.hasNext()){
 			ThreadInfoDump thread = it.next();
@@ -181,9 +218,9 @@ public abstract class AbstractMonitorInfoRestService {
 					continue;
 				}
 			}
-			List<StageInfoBaseDump> stageList = attachThreads.get(callId);
-			if(stageList != null)
-				thread.setStages(thread.getStages() + stageList.size());
+//			List<StageInfoBaseDump> stageList = attachThreads.get(callId);
+//			if(stageList != null)
+//				thread.setStages(thread.getStages() + stageList.size());
 		}
 	}
 
@@ -191,13 +228,13 @@ public abstract class AbstractMonitorInfoRestService {
 //		return false;
 //	}
 
-	/**
-	 * get stage by id in all stage array and their children
-	 * @param array
-	 * @param asyncCallId
-	 * @return
-	 */
-	protected StageInfoBaseDump doGetChildrenStage(StageInfoBaseDump[] stages, String stageId){
-		throw new RuntimeException("not implemented");
-	}
+//	/**
+//	 * get stage by id in all stage array and their children
+//	 * @param array
+//	 * @param asyncCallId
+//	 * @return
+//	 */
+//	protected StageInfoBaseDump doGetChildrenStage(StageInfoBaseDump[] stages, String stageId){
+//		throw new RuntimeException("not implemented");
+//	}
 }

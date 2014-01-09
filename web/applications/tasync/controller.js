@@ -5,7 +5,7 @@ wdefine(function(){
 		if(options.trigger.id == 'fetch'){
 			var servers = this.ctx.component('serverinput').value();
 			if(servers == null || servers.length == 0){
-				alert("Please select active node(s) first.");
+				alert("Please select an active node first.");
 				return;
 			}
 			doFetch();
@@ -42,7 +42,7 @@ wdefine(function(){
 		}
 		var model = ctx.model('threadmodel');
 		model.reqParam('startTs', startTs);
-		model.reqParam('fetchType', "duration");
+		model.reqParam('fetchType', "async");
 		model.reqParam("ips", server);
 		model.reload();
 	}

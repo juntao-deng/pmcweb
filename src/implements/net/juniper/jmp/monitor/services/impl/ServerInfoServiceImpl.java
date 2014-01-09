@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
  */
 @Service(value="net.juniper.jmp.monitor.services.IServerInfoService")
 public class ServerInfoServiceImpl implements IServerInfoService {
-//	private Logger logger = LoggerFactory.getLogger(ServerInfoServiceImpl.class);
 	private IMoEntityConvertor<TargetServerInfo, ServerEntity> convertor;
 	@Autowired
 	private ServerRepository serverRep;
@@ -153,7 +152,8 @@ public class ServerInfoServiceImpl implements IServerInfoService {
 		Iterator<TargetServerInfo> it = allServers.values().iterator();
 		while(it.hasNext()){
 			TargetServerInfo server = it.next();
-			if(server.isNodeAlive()){
+			//if(server.isNodeAlive()){
+			if(server.isAlive()){
 				if(server.getSessionId() == null || server.getSessionId().equals(sesId))
 					aliveNodeServers.add(server);
 			}
