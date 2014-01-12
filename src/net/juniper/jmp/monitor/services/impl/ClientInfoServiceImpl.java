@@ -15,7 +15,8 @@ import net.juniper.jmp.monitor.proxy.HttpProxy;
 import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 /**
  * 
@@ -25,7 +26,9 @@ import org.springframework.stereotype.Service;
 @Service(value="net.juniper.jmp.monitor.services.IClientInfoService")
 public class ClientInfoServiceImpl implements IClientInfoService{
 	static final String SERVICE_NAME = "net.juniper.jmp.monitor.service.IMonitorService";
-	private Logger logger = Logger.getLogger(ClientInfoServiceImpl.class);
+	private Logger logger = LoggerFactory.getLogger(ClientInfoServiceImpl.class);
+	
+	@Override
 	public Map<TargetServerInfo, Object> getThreadInfos(List<TargetServerInfo> servers){
 		return callService(servers, "getThreadInfos", null);
 	}
@@ -139,7 +142,7 @@ public class ClientInfoServiceImpl implements IClientInfoService{
 }
 
 class HttpRequestThread implements Runnable{
-	private Logger logger = Logger.getLogger(HttpRequestThread.class);
+	private Logger logger = LoggerFactory.getLogger(HttpRequestThread.class);
 	private CountDownLatch countDown;
 	private Map<TargetServerInfo, Object> resultsMap;
 	private TargetServerInfo serverInfo;

@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/restapis"/>
-	<classpathentry kind="src" path="src/services"/>
-	<classpathentry kind="src" path="src/implements"/>
-	<classpathentry kind="src" path="src/resources"/>
-	<classpathentry kind="src" path="src/test"/>
-	<classpathentry kind="src" path="src/framework"/>
+	<classpathentry kind="src" path="resources"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/httpcore-4.3.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/httpclient-4.3.1.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/tracerexport.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="net.juniper.wtf.library.container/Middleware_Library"/>
-	<classpathentry kind="con" path="net.juniper.wtf.library.container/Product_Common"/>
-	<classpathentry kind="con" path="net.juniper.wtf.library.container/ThdParty_Library"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-core"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-web"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-data"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-beans"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-context"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/net.juniper.jmp.wtfbase"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-javax.servlet.api"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-javax.validation.api"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.apache.commons.beanutils"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-javax.persistence.api"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-javax.ws.rs.api"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.slf4j"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/3rdParty.net.sf.json"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>
