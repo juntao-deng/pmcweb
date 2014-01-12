@@ -1,2 +1,4 @@
 /tomcat.8080
 /bin
+/clientdb
+/derby.log

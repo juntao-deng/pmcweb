@@ -38,11 +38,5 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.slf4j"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.antlr"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/3rdParty.net.sf.json"/>
-	<classpathentry kind="lib" path="lib/ecj-4.3.1.jar"/>
-	<classpathentry kind="lib" path="lib/tomcat-dbcp.jar"/>
-	<classpathentry kind="lib" path="lib/tomcat-embed-core.jar"/>
-	<classpathentry kind="lib" path="lib/tomcat-embed-jasper.jar"/>
-	<classpathentry kind="lib" path="lib/tomcat-embed-logging-juli.jar"/>
-	<classpathentry kind="lib" path="lib/tomcat-embed-logging-log4j.jar"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>
