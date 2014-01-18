@@ -5,10 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.MultivaluedMap;
 
 import net.juniper.jmp.core.ctx.ApiContext;
-import net.juniper.jmp.core.locator.ServiceLocator;
 import net.juniper.jmp.core.repository.PageResult;
 import net.juniper.jmp.monitor.mo.info.MemSummary;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
@@ -18,11 +18,14 @@ import net.juniper.jmp.monitor.sys.MonitorInfo;
 import net.juniper.jmp.tracer.info.MemInfo;
 
 public class MemInfoRestServiceImpl implements MemInfoRestService {
-	private IClientInfoService service = ServiceLocator.getService(IClientInfoService.class);
+	@Inject
+	private IClientInfoService service;
 	private static List<MemSummary> cacheList = new ArrayList<MemSummary>();
+	
 	static {
 		initMemSummary();
 	}
+	
 	@Override
 	public PageResult<MemSummary> getMemSummaries() {
 		String ipstr = ApiContext.getParameter("ips");

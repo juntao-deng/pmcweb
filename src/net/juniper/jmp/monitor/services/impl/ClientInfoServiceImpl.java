@@ -17,13 +17,11 @@ import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 /**
  * 
  * @author juntaod
  *
  */
-@Service(value="net.juniper.jmp.monitor.services.IClientInfoService")
 public class ClientInfoServiceImpl implements IClientInfoService{
 	static final String SERVICE_NAME = "net.juniper.jmp.monitor.service.IMonitorService";
 	private Logger logger = LoggerFactory.getLogger(ClientInfoServiceImpl.class);

@@ -1,43 +1,41 @@
 package net.juniper.jmp.monitor.services.impl;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.inject.Inject;
+
+import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.core.ctx.PagingContext;
-import net.juniper.jmp.monitor.dao.ServerRepository;
 import net.juniper.jmp.monitor.jpa.ServerEntity;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.services.IServerInfoService;
 import net.juniper.jmp.monitor.sys.MonitorInfo;
+import net.juniper.jmp.persist.IJmpPersistence;
 import net.juniper.jmp.utils.IMoEntityConvertor;
 import net.juniper.jmp.utils.MoEntityConvertor;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
+import org.hibernate.dialect.function.TrimFunctionTemplate.Specification;
 /**
  * 
  * @author juntaod
  *
  */
-@Service(value="net.juniper.jmp.monitor.services.IServerInfoService")
 public class ServerInfoServiceImpl implements IServerInfoService {
+	@Inject
+	private IJmpPersistence em;
 	private IMoEntityConvertor<TargetServerInfo, ServerEntity> convertor;
-	@Autowired
-	private ServerRepository serverRep;
 	@Override
 	public Map<String, TargetServerInfo> getAllServers() {
 		Map<String, TargetServerInfo> allServers = MonitorInfo.getInstance().getAllServers();
 		if(allServers == null){
 			allServers = new ConcurrentHashMap<String, TargetServerInfo>();
-			Specification<ServerEntity> spec = null;
 			Pageable pageable = null;
-			Page<ServerEntity> results = serverRep.findAll(spec, pageable);
+			Page<ServerEntity> results = em.findAll(ServerEntity.class, null, pageable);
 			Page<TargetServerInfo> serverPage = getConvertor().convertFromEntity2Mo(results, TargetServerInfo.class);
 			List<TargetServerInfo> serverList = serverPage.getContent();
 			Iterator<TargetServerInfo> it = serverList.iterator();
@@ -52,13 +50,12 @@ public class ServerInfoServiceImpl implements IServerInfoService {
 
 	@Override
 	public Page<TargetServerInfo> getServers(PagingContext pagingContext) {
-		Specification<ServerEntity> spec = null;
 		Pageable pageable = null;
 		if(pagingContext != null){
 			spec = pagingContext.getSpec(ServerEntity.class);
 			pageable = pagingContext.getPageable();
 		}
-		Page<ServerEntity> results = serverRep.findAll(spec, pageable);
+		Page<ServerEntity> results = em.findAll(ServerEntity.class, pagingContext.pageable);
 		Page<TargetServerInfo> servers = getConvertor().convertFromEntity2Mo(results, TargetServerInfo.class);
 		fillStateFromCache(servers);
 		return servers;

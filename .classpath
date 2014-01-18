@@ -5,6 +5,7 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/httpcore-4.3.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/httpclient-4.3.1.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/tracerexport.jar"/>
+	<classpathentry kind="lib" path="D:/devspace/weld/weld-servlet.jar" sourcepath="D:/devspace/weld/weld-servlet-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-core"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-web"/>
@@ -20,6 +21,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/3rdParty.aopalliance"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/net.juniper.jmp.wtfbase"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.resteasy.resteasy-jaxrs"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.resteasy.resteasy-cdi"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.apache.commons.logging"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.apache.commons.lang"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.apache.commons.io"/>

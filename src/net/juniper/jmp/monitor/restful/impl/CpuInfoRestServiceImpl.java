@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.MultivaluedMap;
 
 import net.juniper.jmp.core.ctx.ApiContext;
-import net.juniper.jmp.core.locator.ServiceLocator;
 import net.juniper.jmp.core.repository.PageResult;
 import net.juniper.jmp.monitor.mo.info.CpuSummary;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
@@ -23,7 +23,8 @@ import net.juniper.jmp.tracer.info.CpuInfo;
  *
  */
 public class CpuInfoRestServiceImpl implements CpuInfoRestService {
-	private IClientInfoService service = ServiceLocator.getService(IClientInfoService.class);
+	@Inject
+	private IClientInfoService service;
 	private static Map<String, CpuSummary> cacheMap = new ConcurrentHashMap<String, CpuSummary>();
 
 	private static void initCpuCache(String ip) {

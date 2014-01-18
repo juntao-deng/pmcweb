@@ -3,41 +3,34 @@ package net.juniper.jmp.monitor.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.juniper.jmp.monitor.dao.NavGroupRepository;
-import net.juniper.jmp.monitor.dao.NavItemRepository;
+import javax.inject.Inject;
+
+import net.juniper.jmp.core.ctx.Sort;
+import net.juniper.jmp.core.ctx.Sort.Order;
 import net.juniper.jmp.monitor.jpa.NavGroupEntity;
 import net.juniper.jmp.monitor.jpa.NavItemEntity;
 import net.juniper.jmp.monitor.mo.home.NavGroupMO;
 import net.juniper.jmp.monitor.mo.home.NavItemMO;
 import net.juniper.jmp.monitor.mo.home.NavType;
 import net.juniper.jmp.monitor.services.NavTypeService;
+import net.juniper.jmp.persist.IJmpPersistence;
 import net.juniper.jmp.utils.IMoEntityConvertor;
 import net.juniper.jmp.utils.MoEntityConvertor;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
-import org.springframework.stereotype.Service;
-@Service(value="net.juniper.jmp.monitor.services.NavTypeService")
 public class NavTypeServiceImpl implements NavTypeService{
-    @Autowired
-    private NavGroupRepository navGroupRepository;
-    @Autowired
-    private NavItemRepository navItemRepository;
-    
+    @Inject IJmpPersistence em;
     private IMoEntityConvertor<NavItemMO, NavItemEntity> itemConvertor;
     private IMoEntityConvertor<NavGroupMO, NavGroupEntity> groupConvertor;
     
     public List<NavGroupEntity> getNavGroups(){
     	Order order = new Order("id");
     	Sort sort = new Sort(order);
-    	return (List<NavGroupEntity>) navGroupRepository.findAll(sort);
+    	return (List<NavGroupEntity>) em.findAll(NavGroupEntity.class, sort);
     }
     
     public List<NavItemEntity> getNavItems() {
     	Order order = new Order("id");
     	Sort sort = new Sort(order);
-    	return (List<NavItemEntity>) navItemRepository.findAll(sort);
+    	return (List<NavItemEntity>) em.findAll(NavItemEntity.class, sort);
     }
 
 	@Override

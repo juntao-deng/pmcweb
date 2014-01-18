@@ -3,10 +3,9 @@ package net.juniper.jmp.monitor.services;
 import java.util.List;
 import java.util.Map;
 
+import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.core.ctx.PagingContext;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
-
-import org.springframework.data.domain.Page;
 
 /**
  * 
