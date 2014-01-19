@@ -32,7 +32,7 @@ public class PmcWeb {
 					urls[i] = new URL("file:/" + fs[i].getAbsolutePath());
 					System.out.println("jar:" + urls[i].toString());
 				}
-				URLClassLoader cls = new URLClassLoader(urls);
+				URLClassLoader cls = new URLClassLoader(urls, PmcWeb.class.getClassLoader());
 				return cls;
 			}
 		}

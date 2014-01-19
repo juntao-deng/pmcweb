@@ -7,7 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import net.juniper.jmp.core.repository.PageResult;
+import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.tracer.dumper.info.SqlInfoDump;
 import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 
@@ -17,7 +17,7 @@ public interface SqlInfoRestService {
 	@GET 
 	@Path("/") 
 	@Produces(MediaType.APPLICATION_JSON)
-	public PageResult<SqlInfoDump> getSqlInfos(@QueryParam("startTs") String startTs, @QueryParam("endTs") String endTs);
+	public Page<SqlInfoDump> getSqlInfos(@QueryParam("startTs") String startTs, @QueryParam("endTs") String endTs);
 	
 	@GET 
 	@Path("/{id}/stageinfos/{sid}") 

@@ -2,7 +2,8 @@ package net.juniper.jmp.monitor.servlet;
 
 import java.util.Iterator;
 
-import net.juniper.jmp.core.locator.ServiceLocator;
+import javax.inject.Inject;
+
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.monitor.services.IServerInfoService;
@@ -17,8 +18,11 @@ import org.slf4j.LoggerFactory;
  */
 public class NodeStateThread implements Runnable {
 	private Logger logger = LoggerFactory.getLogger(NodeStateThread.class);
-	private IServerInfoService serverService = ServiceLocator.getService(IServerInfoService.class);
-	private IClientInfoService clientInfoService = ServiceLocator.getService(IClientInfoService.class);
+	@Inject
+	private IServerInfoService serverService;
+	
+	@Inject
+	private IClientInfoService clientInfoService;
 	@Override
 	public void run() {
 		while(true){

@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
-import net.juniper.jmp.core.repository.PageResult;
+import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.monitor.mo.info.MemSummary;
 
 @Path("/meminfos")
@@ -17,7 +17,7 @@ public interface MemInfoRestService {
 	@GET 
 	@Path("/") 
 	@Produces(MediaType.APPLICATION_JSON)
-	public PageResult<MemSummary> getMemSummaries();
+	public Page<MemSummary> getMemSummaries();
 	
 	@GET
 	@Path("/{id}")

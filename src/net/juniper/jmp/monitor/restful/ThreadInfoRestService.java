@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
 
-import net.juniper.jmp.core.repository.PageResult;
+import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 import net.juniper.jmp.tracer.dumper.info.ThreadInfoDump;
 
@@ -18,7 +18,7 @@ public interface ThreadInfoRestService {
 	@GET 
 	@Path("/") 
 	@Produces(MediaType.APPLICATION_JSON)
-	public PageResult<ThreadInfoDump> getThreadInfos();
+	public Page<ThreadInfoDump> getThreadInfos();
 	
 	@GET 
 	@Path("/{id}/stageinfos") 

@@ -12,8 +12,6 @@ import javax.inject.Inject;
 import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.core.ctx.Pageable;
-import net.juniper.jmp.core.ctx.impl.PageImpl;
-import net.juniper.jmp.core.repository.PageResult;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.SqlInfoRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
@@ -25,7 +23,7 @@ public class SqlInfoRestServiceImpl extends AbstractMonitorInfoRestService imple
 	@Inject
 	private IClientInfoService service;
 	@Override
-	public PageResult<SqlInfoDump> getSqlInfos(String startTs, String endTs) {
+	public Page<SqlInfoDump> getSqlInfos(String startTs, String endTs) {
 		String ipstr = ApiContext.getParameter("ips");
 		String fetchType = ApiContext.getParameter("fetchType");
 		if(fetchType == null)
@@ -63,7 +61,7 @@ public class SqlInfoRestServiceImpl extends AbstractMonitorInfoRestService imple
 		
 		List<SqlInfoDump> or = cacheObj.list;
 		Pageable p = ApiContext.getPagingContext().getPageable();
-		int pageIndex = p.getPageNumber();
+		int pageIndex = p.getPageIndex();
 		int pageSize = p.getPageSize();
 		int jump = pageIndex * pageSize;
 		List<SqlInfoDump> pageResults = new ArrayList<SqlInfoDump>();
@@ -71,8 +69,8 @@ public class SqlInfoRestServiceImpl extends AbstractMonitorInfoRestService imple
 		for(int i = jump; i < (jump + pageSize) && i < totalSize; i ++){
 			pageResults.add(or.get(i).detach());
 		}
-		Page<SqlInfoDump> page = new PageImpl<SqlInfoDump>(pageResults, p, totalSize);
-		return new PageResult<SqlInfoDump>(page);
+		Page<SqlInfoDump> page = new Page<SqlInfoDump>(pageResults, p, totalSize);
+		return page;
 	}
 	
 	class CacheObject{

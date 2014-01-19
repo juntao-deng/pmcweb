@@ -2,7 +2,8 @@ package net.juniper.jmp.monitor.servlet;
 
 import java.util.concurrent.CountDownLatch;
 
-import net.juniper.jmp.core.locator.ServiceLocator;
+import javax.inject.Inject;
+
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.monitor.services.IServerInfoService;
@@ -16,7 +17,10 @@ import org.slf4j.LoggerFactory;
  */
 public class ServerStateThread implements Runnable {
 	private Logger logger = LoggerFactory.getLogger(NodeStateThread.class);
-	private IServerInfoService serverService = ServiceLocator.getService(IServerInfoService.class);
+	
+	@Inject
+	private IServerInfoService serverService;
+	
 	@Override
 	public void run() {
 		while(true){
@@ -49,9 +53,12 @@ public class ServerStateThread implements Runnable {
 }
 
 class ConnectThread implements Runnable{
-	private IClientInfoService clientInfoService = ServiceLocator.getService(IClientInfoService.class);
+	@Inject
+	private IClientInfoService clientInfoService;
+	
 	private TargetServerInfo server;
 	private CountDownLatch countDown;
+	
 	public ConnectThread(TargetServerInfo server, CountDownLatch countDown){
 		this.server = server;
 		this.countDown = countDown;

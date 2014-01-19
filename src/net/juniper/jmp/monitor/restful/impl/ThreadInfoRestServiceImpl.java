@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import javax.ws.rs.core.PathSegment;
 
 import net.juniper.jmp.core.ctx.ApiContext;
-import net.juniper.jmp.core.repository.PageResult;
+import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.ThreadInfoRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
@@ -27,10 +27,10 @@ import net.juniper.jmp.tracer.dumper.info.ThreadInfoDump;
 public class ThreadInfoRestServiceImpl extends AbstractMonitorInfoRestService implements ThreadInfoRestService{
 	private static final String THREADINFOS = "threadinfos";
 	@Inject
-	private IClientInfoService clientServic;
+	private IClientInfoService clientService;
 	
 	@Override
-	public PageResult<ThreadInfoDump> getThreadInfos() {
+	public Page<ThreadInfoDump> getThreadInfos() {
 		String ipstr = ApiContext.getParameter("ips");
 		String[] ips = ipstr.split(",");
 		List<TargetServerInfo> servers = getServers(ips);
@@ -60,7 +60,7 @@ public class ThreadInfoRestServiceImpl extends AbstractMonitorInfoRestService im
 			}
 		});
 		ApiContext.getGlobalSessionCache().addCache(THREADINFOS, or);
-		return new PageResult<ThreadInfoDump>(dr);
+		return new Page<ThreadInfoDump>(dr);
 	}
 
 //	@Override

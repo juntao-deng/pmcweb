@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import javax.ws.rs.core.MultivaluedMap;
 
 import net.juniper.jmp.core.ctx.ApiContext;
-import net.juniper.jmp.core.repository.PageResult;
+import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.monitor.mo.info.MemSummary;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.MemInfoRestService;
@@ -27,7 +27,7 @@ public class MemInfoRestServiceImpl implements MemInfoRestService {
 	}
 	
 	@Override
-	public PageResult<MemSummary> getMemSummaries() {
+	public Page<MemSummary> getMemSummaries() {
 		String ipstr = ApiContext.getParameter("ips");
 		String[] ips = ipstr.split(",");
 		//only one server one times
@@ -53,7 +53,7 @@ public class MemInfoRestServiceImpl implements MemInfoRestService {
 		cacheList.get(1).queue(memInfo.getTotal());
 		//used
 		cacheList.get(2).queue(memInfo.getTotal() - memInfo.getFree());
-		return new PageResult<MemSummary>(cacheList);
+		return new Page<MemSummary>(cacheList);
 	}
 
 	private static void initMemSummary() {

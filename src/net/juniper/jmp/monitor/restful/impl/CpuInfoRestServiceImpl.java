@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import javax.ws.rs.core.MultivaluedMap;
 
 import net.juniper.jmp.core.ctx.ApiContext;
-import net.juniper.jmp.core.repository.PageResult;
+import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.monitor.mo.info.CpuSummary;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.CpuInfoRestService;
@@ -41,7 +41,7 @@ public class CpuInfoRestServiceImpl implements CpuInfoRestService {
 	}
 	
 	@Override
-	public PageResult<CpuSummary> getCpuSummaries() {
+	public Page<CpuSummary> getCpuSummaries() {
 		String ipStr = ApiContext.getParameter("ips");
 		String[] ips = ipStr.split(",");
 		List<TargetServerInfo> servers = getServers(ips);
@@ -68,7 +68,7 @@ public class CpuInfoRestServiceImpl implements CpuInfoRestService {
 			summary.queue((int) (cpuInfo.getUsage()));
 			results.add(summary);
 		}
-		return new PageResult<CpuSummary>(results);
+		return new Page<CpuSummary>(results);
 	}
 
 	@Override

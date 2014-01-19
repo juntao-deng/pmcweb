@@ -9,7 +9,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
-import net.juniper.jmp.core.repository.PageResult;
+import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 import net.juniper.jmp.tracer.dumper.info.ThreadInfoDump;
 
@@ -19,7 +19,7 @@ public interface ThreadInfoHisRestService {
 	@GET 
 	@Path("/") 
 	@Produces(MediaType.APPLICATION_JSON)
-	public PageResult<ThreadInfoDump> getThreadInfos(@QueryParam("startTs") String startTs, @QueryParam("endTs") String endTs);
+	public Page<ThreadInfoDump> getThreadInfos(@QueryParam("startTs") String startTs, @QueryParam("endTs") String endTs);
 	
 	@GET 
 	@Path("/{id}/stageinfos") 

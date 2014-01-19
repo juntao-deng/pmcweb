@@ -13,21 +13,23 @@ import net.juniper.jmp.monitor.mo.home.NavGroupMO;
 import net.juniper.jmp.monitor.mo.home.NavItemMO;
 import net.juniper.jmp.monitor.mo.home.NavType;
 import net.juniper.jmp.monitor.services.NavTypeService;
-import net.juniper.jmp.persist.IJmpPersistence;
+import net.juniper.jmp.persist.IJmpPersistenceManager;
 import net.juniper.jmp.utils.IMoEntityConvertor;
 import net.juniper.jmp.utils.MoEntityConvertor;
 public class NavTypeServiceImpl implements NavTypeService{
-    @Inject IJmpPersistence em;
+    @Inject IJmpPersistenceManager em;
     private IMoEntityConvertor<NavItemMO, NavItemEntity> itemConvertor;
     private IMoEntityConvertor<NavGroupMO, NavGroupEntity> groupConvertor;
     
-    public List<NavGroupEntity> getNavGroups(){
+    @Override
+	public List<NavGroupEntity> getNavGroups(){
     	Order order = new Order("id");
     	Sort sort = new Sort(order);
     	return (List<NavGroupEntity>) em.findAll(NavGroupEntity.class, sort);
     }
     
-    public List<NavItemEntity> getNavItems() {
+    @Override
+	public List<NavItemEntity> getNavItems() {
     	Order order = new Order("id");
     	Sort sort = new Sort(order);
     	return (List<NavItemEntity>) em.findAll(NavItemEntity.class, sort);

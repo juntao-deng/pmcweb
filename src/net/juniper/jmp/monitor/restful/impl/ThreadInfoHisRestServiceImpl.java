@@ -15,8 +15,6 @@ import javax.ws.rs.core.MultivaluedMap;
 import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.core.ctx.Pageable;
-import net.juniper.jmp.core.ctx.impl.PageImpl;
-import net.juniper.jmp.core.repository.PageResult;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.ThreadInfoHisRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
@@ -32,7 +30,7 @@ public class ThreadInfoHisRestServiceImpl extends AbstractMonitorInfoRestService
 	@Inject
 	private IClientInfoService service;
 	@Override
-	public PageResult<ThreadInfoDump> getThreadInfos(String startTs, String endTs) {
+	public Page<ThreadInfoDump> getThreadInfos(String startTs, String endTs) {
 		String ipstr = ApiContext.getParameter("ips");
 		String fetchType = ApiContext.getParameter("fetchType");
 		if(fetchType == null)
@@ -73,7 +71,7 @@ public class ThreadInfoHisRestServiceImpl extends AbstractMonitorInfoRestService
 		
 		List<ThreadInfoDump> or = cacheObj.list;
 		Pageable p = ApiContext.getPagingContext().getPageable();
-		int pageIndex = p.getPageNumber();
+		int pageIndex = p.getPageIndex();
 		int pageSize = p.getPageSize();
 		int jump = pageIndex * pageSize;
 		List<ThreadInfoDump> pageResults = new ArrayList<ThreadInfoDump>();
@@ -81,8 +79,8 @@ public class ThreadInfoHisRestServiceImpl extends AbstractMonitorInfoRestService
 		for(int i = jump; i < (jump + pageSize) && i < totalSize; i ++){
 			pageResults.add(or.get(i).detach());
 		}
-		Page<ThreadInfoDump> page = new PageImpl<ThreadInfoDump>(pageResults, p, totalSize);
-		return new PageResult<ThreadInfoDump>(page);
+		Page<ThreadInfoDump> page = new Page<ThreadInfoDump>(pageResults, p, totalSize);
+		return page;
 	}
 
 	private void processForFetchType(String fetchType, List<ThreadInfoDump> or) {

@@ -8,11 +8,11 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.core.ctx.Page;
-import net.juniper.jmp.core.repository.PageResult;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.ServerInfoRestService;
 import net.juniper.jmp.monitor.services.IServerInfoService;
 import net.juniper.jmp.monitor.sys.MonitorInfo;
+
 /**
  * 
  * @author juntaod
@@ -22,9 +22,9 @@ public class ServerInfoRestServiceImpl implements ServerInfoRestService {
 	@Inject
 	private IServerInfoService service;
 	@Override
-	public PageResult<TargetServerInfo> getServerInfos() {
+	public Page<TargetServerInfo> getServerInfos() {
 		Page<TargetServerInfo> page = service.getServers(ApiContext.getPagingContext());
-		return new PageResult<TargetServerInfo>(page);
+		return page;
 	}
 
 	@Override

@@ -1,13 +1,10 @@
 package net.juniper.jmp.monitor.services.impl;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.inject.Inject;
 
 import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.core.ctx.PagingContext;
@@ -15,78 +12,95 @@ import net.juniper.jmp.monitor.jpa.ServerEntity;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.services.IServerInfoService;
 import net.juniper.jmp.monitor.sys.MonitorInfo;
-import net.juniper.jmp.persist.IJmpPersistence;
+import net.juniper.jmp.persist.IJmpPersistenceManager;
+import net.juniper.jmp.persist.JmpPersistenceContext;
 import net.juniper.jmp.utils.IMoEntityConvertor;
 import net.juniper.jmp.utils.MoEntityConvertor;
-
-import org.hibernate.dialect.function.TrimFunctionTemplate.Specification;
 /**
  * 
  * @author juntaod
  *
  */
 public class ServerInfoServiceImpl implements IServerInfoService {
-	@Inject
-	private IJmpPersistence em;
 	private IMoEntityConvertor<TargetServerInfo, ServerEntity> convertor;
 	@Override
 	public Map<String, TargetServerInfo> getAllServers() {
 		Map<String, TargetServerInfo> allServers = MonitorInfo.getInstance().getAllServers();
 		if(allServers == null){
 			allServers = new ConcurrentHashMap<String, TargetServerInfo>();
-			Pageable pageable = null;
-			Page<ServerEntity> results = em.findAll(ServerEntity.class, null, pageable);
-			Page<TargetServerInfo> serverPage = getConvertor().convertFromEntity2Mo(results, TargetServerInfo.class);
-			List<TargetServerInfo> serverList = serverPage.getContent();
-			Iterator<TargetServerInfo> it = serverList.iterator();
-			while(it.hasNext()){
-				TargetServerInfo server = it.next();
-				allServers.put(server.getAddress(), server);
+			IJmpPersistenceManager em = JmpPersistenceContext.getInstance();
+			try{
+				Page<ServerEntity> results = em.findAll(ServerEntity.class, null, null);
+				Page<TargetServerInfo> serverPage = getConvertor().convertFromEntity2Mo(results, TargetServerInfo.class);
+				List<TargetServerInfo> serverList = serverPage.getRecords();
+				Iterator<TargetServerInfo> it = serverList.iterator();
+				while(it.hasNext()){
+					TargetServerInfo server = it.next();
+					allServers.put(server.getAddress(), server);
+				}
+				MonitorInfo.getInstance().setAllServers(allServers);
 			}
-			MonitorInfo.getInstance().setAllServers(allServers);
+			finally{
+				em.release();
+			}
 		}
 		return allServers;
 	}
 
 	@Override
 	public Page<TargetServerInfo> getServers(PagingContext pagingContext) {
-		Pageable pageable = null;
-		if(pagingContext != null){
-			spec = pagingContext.getSpec(ServerEntity.class);
-			pageable = pagingContext.getPageable();
+		IJmpPersistenceManager em = JmpPersistenceContext.getInstance();
+		try{
+			Page<ServerEntity> results = em.findAll(ServerEntity.class, null, pagingContext.getPageable());
+			Page<TargetServerInfo> servers = getConvertor().convertFromEntity2Mo(results, TargetServerInfo.class);
+			fillStateFromCache(servers);
+			return servers;
 		}
-		Page<ServerEntity> results = em.findAll(ServerEntity.class, pagingContext.pageable);
-		Page<TargetServerInfo> servers = getConvertor().convertFromEntity2Mo(results, TargetServerInfo.class);
-		fillStateFromCache(servers);
-		return servers;
+		finally{
+			em.release();
+		}
 	}
 
 	@Override
 	public TargetServerInfo saveServer(TargetServerInfo server) {
 		if(server == null)
 			return null;
-		ServerEntity entity = getConvertor().convertFromMo2Entity(server, ServerEntity.class);
-		ServerEntity result = serverRep.save(entity);
-		TargetServerInfo serverInfo = getConvertor().convertFromEntity2Mo(result, TargetServerInfo.class);
-		getAllServers().put(result.getAddress(), serverInfo);
-		return serverInfo;
+		
+		IJmpPersistenceManager em = JmpPersistenceContext.getInstance();
+		try{
+			ServerEntity entity = getConvertor().convertFromMo2Entity(server, ServerEntity.class);
+			ServerEntity result = em.insert(entity);
+			TargetServerInfo serverInfo = getConvertor().convertFromEntity2Mo(result, TargetServerInfo.class);
+			getAllServers().put(result.getAddress(), serverInfo);
+			return serverInfo;
+		}
+		finally{
+			em.release();
+		}
 	}
 	
 	@Override
 	public TargetServerInfo updateServer(TargetServerInfo server) {
 		if(server == null)
 			return null;
-		ServerEntity entity = getConvertor().convertFromMo2Entity(server, ServerEntity.class);
-		ServerEntity result = serverRep.save(entity);
-		TargetServerInfo serverInfo = getConvertor().convertFromEntity2Mo(result, TargetServerInfo.class);
-		getAllServers().put(result.getAddress(), serverInfo);
-		return serverInfo;
+		
+		IJmpPersistenceManager em = JmpPersistenceContext.getInstance();
+		try{
+			ServerEntity entity = getConvertor().convertFromMo2Entity(server, ServerEntity.class);
+			ServerEntity result = em.update(entity);
+			TargetServerInfo serverInfo = getConvertor().convertFromEntity2Mo(result, TargetServerInfo.class);
+			getAllServers().put(result.getAddress(), serverInfo);
+			return serverInfo;
+		}
+		finally{
+			em.release();
+		}
 	}
 	
 	private void fillStateFromCache(Page<TargetServerInfo> servers) {
 		if(servers == null)
 			return;
-		Iterator<TargetServerInfo> it = servers.iterator();
+		Iterator<TargetServerInfo> it = servers.getRecords().iterator();
 		while(it.hasNext()){
 			TargetServerInfo server = it.next();
 			TargetServerInfo cacheServer = getAllServers().get(server.getAddress());
@@ -98,14 +112,26 @@ public class ServerInfoServiceImpl implements IServerInfoService {
 	}
 	@Override
 	public void deleteServer(Integer id) {
-		serverRep.delete(id);
+		IJmpPersistenceManager em = JmpPersistenceContext.getInstance();
+		try{
+			em.deleteByPK(ServerEntity.class, id);
+		}
+		finally{
+			em.release();
+		}
 	}
 	
 	@Override
 	public void deleteServers(Integer[] ids) {
-		for(int i = 0; i < ids.length; i ++){
-			MonitorInfo.getInstance().removeServerById(ids[i]);
-			serverRep.delete(ids[i]);
+		IJmpPersistenceManager em = JmpPersistenceContext.getInstance();
+		try{
+			for(int i = 0; i < ids.length; i ++){
+				MonitorInfo.getInstance().removeServerById(ids[i]);
+				em.deleteByPK(ServerEntity.class, ids[i]);
+			}
+		}
+		finally{
+			em.release();
 		}
 	}
 
