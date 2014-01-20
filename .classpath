@@ -6,12 +6,6 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/httpclient-4.3.1.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/tracerexport.jar"/>
 	<classpathentry kind="lib" path="lib/derby.jar"/>
-	<classpathentry kind="lib" path="lib/ecj-4.3.1.jar"/>
-	<classpathentry kind="lib" path="lib/tomcat-dbcp.jar"/>
-	<classpathentry kind="lib" path="lib/tomcat-embed-core.jar"/>
-	<classpathentry kind="lib" path="lib/tomcat-embed-jasper.jar"/>
-	<classpathentry kind="lib" path="lib/tomcat-embed-logging-juli.jar"/>
-	<classpathentry kind="lib" path="lib/tomcat-embed-logging-log4j.jar"/>
 	<classpathentry kind="lib" path="lib/tomcatstart.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/3rdParty.aopalliance"/>
@@ -51,5 +45,11 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.jettison"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.woodstox"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.jackson.jackson-jaxrs"/>
+	<classpathentry kind="lib" path="lib/ecj-4.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/tomcat-dbcp.jar"/>
+	<classpathentry kind="lib" path="lib/tomcat-embed-core.jar"/>
+	<classpathentry kind="lib" path="lib/tomcat-embed-jasper.jar"/>
+	<classpathentry kind="lib" path="lib/tomcat-embed-logging-juli.jar"/>
+	<classpathentry kind="lib" path="lib/tomcat-embed-logging-log4j.jar"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>
