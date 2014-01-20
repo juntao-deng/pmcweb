@@ -43,5 +43,13 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-core"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-asm"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-expression"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.resteasy.resteasy-jackson-provider"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.resteasy.resteasy-jaxb-provider"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.jackson.jackson-core-asl"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.jackson.jackson-mapper-asl"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.jackson.jackson-xc"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.jettison"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.woodstox"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.jackson.jackson-jaxrs"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>

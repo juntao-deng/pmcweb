@@ -20,14 +20,16 @@ import net.juniper.jmp.monitor.restful.ThreadInfoHisRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 import net.juniper.jmp.tracer.dumper.info.ThreadInfoDump;
+
+import org.springframework.stereotype.Service;
 /**
  * 
  * @author juntaod
  *
  */
+@Service(value="net.juniper.jmp.monitor.restful.ThreadInfoHisRestService")
 public class ThreadInfoHisRestServiceImpl extends AbstractMonitorInfoRestService implements ThreadInfoHisRestService {
 	private static final String THREADHISINFOS = "threadhisinfos";
-	private IClientInfoService service = SpringWebContextHelper.getService(IClientInfoService.class);
 	@Override
 	public Page<ThreadInfoDump> getThreadInfos(String startTs, String endTs) {
 		String ipstr = ApiContext.getParameter("ips");
@@ -44,8 +46,7 @@ public class ThreadInfoHisRestServiceImpl extends AbstractMonitorInfoRestService
 			
 			String[] ips = ipstr.split(",");
 			List<TargetServerInfo> servers = getServers(ips);
-	//		String startTs = ApiContext.getParameter("startts");
-	//		String endTs = ApiContext.getParameter("endts");
+			IClientInfoService service = SpringWebContextHelper.getService(IClientInfoService.class);
 			Map<TargetServerInfo, Object> reqResults = service.getPeriodThreadInfos(servers, startTs, endTs, fetchType);
 			List<ThreadInfoDump> or = new ArrayList<ThreadInfoDump>();
 			Iterator<Entry<TargetServerInfo, Object>> it = reqResults.entrySet().iterator();
@@ -125,6 +126,7 @@ public class ThreadInfoHisRestServiceImpl extends AbstractMonitorInfoRestService
 	
 	private StageInfoBaseDump[] doGetChildrenStages(StageInfoBaseDump[] stages, String id){
 		if(stages != null){
+			IClientInfoService service = SpringWebContextHelper.getService(IClientInfoService.class);
 			for(int i = 0; i < stages.length; i ++){
 				StageInfoBaseDump stage = stages[i];
 				if(stage.getCallId().equals(id)){

@@ -20,10 +20,10 @@
 		</listener-class>
   </listener> 
   <listener>
-  	<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
+  	<listener-class>net.juniper.jmp.monitor.servlet.MonitorInitializeListener</listener-class>
   </listener>
   <listener>
-  	<listener-class>net.juniper.jmp.monitor.servlet.MonitorInitializeListener</listener-class>
+  	<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
   </listener>
   <listener>
   	<listener-class>net.juniper.jmp.core.servlet.WtfRequestContextListener</listener-class>

@@ -17,6 +17,9 @@ import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.monitor.sys.MonitorInfo;
 import net.juniper.jmp.tracer.info.MemInfo;
 
+import org.springframework.stereotype.Service;
+
+@Service(value="net.juniper.jmp.monitor.restful.MemInfoRestService")
 public class MemInfoRestServiceImpl implements MemInfoRestService {
 	private static List<MemSummary> cacheList = new ArrayList<MemSummary>();
 	

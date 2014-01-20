@@ -19,11 +19,14 @@ import net.juniper.jmp.monitor.restful.ThreadInfoActionRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 import net.juniper.jmp.tracer.dumper.info.ThreadInfoDump;
+
+import org.springframework.stereotype.Service;
 /**
  * 
  * @author juntaod
  *
  */
+@Service(value="net.juniper.jmp.monitor.restful.ThreadInfoActionRestService")
 public class ThreadInfoActionRestServiceImpl extends AbstractMonitorInfoRestService implements ThreadInfoActionRestService {
 	private static final String THREADACTIONINFOS = "threadactioninfos";
 	private static Integer RECORD_INDEX = 0;

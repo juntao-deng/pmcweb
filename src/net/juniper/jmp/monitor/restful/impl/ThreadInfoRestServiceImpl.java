@@ -19,20 +19,23 @@ import net.juniper.jmp.monitor.restful.ThreadInfoRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 import net.juniper.jmp.tracer.dumper.info.ThreadInfoDump;
+
+import org.springframework.stereotype.Service;
 /**
  * 
  * @author juntaod
  *
  */
+@Service(value="net.juniper.jmp.monitor.restful.ThreadInfoRestService")
 public class ThreadInfoRestServiceImpl extends AbstractMonitorInfoRestService implements ThreadInfoRestService{
 	private static final String THREADINFOS = "threadinfos";
-	private IClientInfoService clientService = SpringWebContextHelper.getService(IClientInfoService.class);
 	
 	@Override
 	public Page<ThreadInfoDump> getThreadInfos() {
 		String ipstr = ApiContext.getParameter("ips");
 		String[] ips = ipstr.split(",");
 		List<TargetServerInfo> servers = getServers(ips);
+		IClientInfoService clientService = SpringWebContextHelper.getService(IClientInfoService.class);
 		Map<TargetServerInfo, Object> reqResults = clientService.getThreadInfos(servers);
 		List<ThreadInfoDump> or = new ArrayList<ThreadInfoDump>();
 		Iterator<Entry<TargetServerInfo, Object>> it = reqResults.entrySet().iterator();

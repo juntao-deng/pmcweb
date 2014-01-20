@@ -17,9 +17,11 @@ import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.tracer.dumper.info.SqlInfoDump;
 import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 
+import org.springframework.stereotype.Service;
+
+@Service(value="net.juniper.jmp.monitor.restful.SqlInfoRestService")
 public class SqlInfoRestServiceImpl extends AbstractMonitorInfoRestService implements SqlInfoRestService {
 	private static final String SQLHISINFOS = "sqlhisinfos";
-	private IClientInfoService service = SpringWebContextHelper.getService(IClientInfoService.class);
 	@Override
 	public Page<SqlInfoDump> getSqlInfos(String startTs, String endTs) {
 		String ipstr = ApiContext.getParameter("ips");
@@ -36,8 +38,7 @@ public class SqlInfoRestServiceImpl extends AbstractMonitorInfoRestService imple
 			
 			String[] ips = ipstr.split(",");
 			List<TargetServerInfo> servers = getServers(ips);
-	//		String startTs = ApiContext.getParameter("startts");
-	//		String endTs = ApiContext.getParameter("endts");
+			IClientInfoService service = SpringWebContextHelper.getService(IClientInfoService.class);
 			Map<TargetServerInfo, Object> reqResults = service.getSqlInfos(servers, startTs, endTs, fetchType);
 			List<SqlInfoDump> or = new ArrayList<SqlInfoDump>();
 			Iterator<Entry<TargetServerInfo, Object>> it = reqResults.entrySet().iterator();
@@ -95,6 +96,7 @@ public class SqlInfoRestServiceImpl extends AbstractMonitorInfoRestService imple
 		}
 		if(sqlDump != null){
 			TargetServerInfo server = (TargetServerInfo) sqlDump.getUserObject();
+			IClientInfoService service = SpringWebContextHelper.getService(IClientInfoService.class);
 			return service.getStageById(server, sid);
 		}
 		return null;

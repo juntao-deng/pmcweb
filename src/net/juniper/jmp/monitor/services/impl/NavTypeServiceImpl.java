@@ -15,6 +15,10 @@ import net.juniper.jmp.persist.IJmpPersistenceManager;
 import net.juniper.jmp.persist.JmpPersistenceContext;
 import net.juniper.jmp.utils.IMoEntityConvertor;
 import net.juniper.jmp.utils.MoEntityConvertor;
+
+import org.springframework.stereotype.Service;
+
+@Service(value="net.juniper.jmp.monitor.services.NavTypeService")
 public class NavTypeServiceImpl implements NavTypeService{
     private IMoEntityConvertor<NavItemMO, NavItemEntity> itemConvertor;
     private IMoEntityConvertor<NavGroupMO, NavGroupEntity> groupConvertor;

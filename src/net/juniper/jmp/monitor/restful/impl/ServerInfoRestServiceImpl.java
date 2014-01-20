@@ -10,19 +10,21 @@ import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.core.locator.SpringWebContextHelper;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.ServerInfoRestService;
-import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.monitor.services.IServerInfoService;
 import net.juniper.jmp.monitor.sys.MonitorInfo;
+
+import org.springframework.stereotype.Service;
 
 /**
  * 
  * @author juntaod
  *
  */
+@Service(value="net.juniper.jmp.monitor.restful.ServerInfoRestService")
 public class ServerInfoRestServiceImpl implements ServerInfoRestService {
-	private IServerInfoService service = SpringWebContextHelper.getService(IServerInfoService.class);
 	@Override
 	public Page<TargetServerInfo> getServerInfos() {
+		IServerInfoService service = SpringWebContextHelper.getService(IServerInfoService.class);
 		Page<TargetServerInfo> page = service.getServers(ApiContext.getPagingContext());
 		return page;
 	}
@@ -41,6 +43,7 @@ public class ServerInfoRestServiceImpl implements ServerInfoRestService {
 
 	@Override
 	public Object processAction(String action, MultivaluedMap<String, String> form){
+		IServerInfoService service = SpringWebContextHelper.getService(IServerInfoService.class);
 		if(action.equals("getServerList")){
 			String aliveNode = form.getFirst("aliveNode");
 			if(aliveNode != null && aliveNode.equals("true")){
@@ -78,18 +81,21 @@ public class ServerInfoRestServiceImpl implements ServerInfoRestService {
 
 	@Override
 	public TargetServerInfo updateServerInfo(Integer id, TargetServerInfo device) {
+		IServerInfoService service = SpringWebContextHelper.getService(IServerInfoService.class);
 		TargetServerInfo result = service.saveServer(device);
 		return result;
 	}
 
 	@Override
 	public TargetServerInfo addServerInfo(TargetServerInfo device) {
+		IServerInfoService service = SpringWebContextHelper.getService(IServerInfoService.class);
 		TargetServerInfo result = service.saveServer(device);
 		return result;
 	}
 
 	@Override
 	public void deleteServerInfo(String id) {
+		IServerInfoService service = SpringWebContextHelper.getService(IServerInfoService.class);
 		String[] ids = id.split(",");
 		Integer[] intIds = new Integer[ids.length];
 		for(int i = 0; i < ids.length; i ++){

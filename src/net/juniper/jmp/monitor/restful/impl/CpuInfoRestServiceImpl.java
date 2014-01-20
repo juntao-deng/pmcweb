@@ -8,6 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.ws.rs.core.MultivaluedMap;
 
+import org.springframework.stereotype.Service;
+
 import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.core.locator.SpringWebContextHelper;
@@ -22,6 +24,7 @@ import net.juniper.jmp.tracer.info.CpuInfo;
  * @author juntaod
  *
  */
+@Service(value="net.juniper.jmp.monitor.restful.CpuInfoRestService")
 public class CpuInfoRestServiceImpl implements CpuInfoRestService {
 	private static Map<String, CpuSummary> cacheMap = new ConcurrentHashMap<String, CpuSummary>();
 
