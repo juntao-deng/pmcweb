@@ -7,11 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.inject.Inject;
-
 import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.core.ctx.Page;
 import net.juniper.jmp.core.ctx.Pageable;
+import net.juniper.jmp.core.locator.SpringWebContextHelper;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.SqlInfoRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
@@ -20,8 +19,7 @@ import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 
 public class SqlInfoRestServiceImpl extends AbstractMonitorInfoRestService implements SqlInfoRestService {
 	private static final String SQLHISINFOS = "sqlhisinfos";
-	@Inject
-	private IClientInfoService service;
+	private IClientInfoService service = SpringWebContextHelper.getService(IClientInfoService.class);
 	@Override
 	public Page<SqlInfoDump> getSqlInfos(String startTs, String endTs) {
 		String ipstr = ApiContext.getParameter("ips");

@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.inject.Inject;
 import javax.ws.rs.core.MultivaluedMap;
 
 import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.core.ctx.Page;
+import net.juniper.jmp.core.locator.SpringWebContextHelper;
 import net.juniper.jmp.monitor.mo.info.CpuSummary;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.CpuInfoRestService;
@@ -23,8 +23,6 @@ import net.juniper.jmp.tracer.info.CpuInfo;
  *
  */
 public class CpuInfoRestServiceImpl implements CpuInfoRestService {
-	@Inject
-	private IClientInfoService service;
 	private static Map<String, CpuSummary> cacheMap = new ConcurrentHashMap<String, CpuSummary>();
 
 	private static void initCpuCache(String ip) {
@@ -54,7 +52,7 @@ public class CpuInfoRestServiceImpl implements CpuInfoRestService {
 			}
 		}
 		List<CpuSummary> results = new ArrayList<CpuSummary>();
-		Map<TargetServerInfo, Object> reqResults = service.getCpuInfo(servers);
+		Map<TargetServerInfo, Object> reqResults = SpringWebContextHelper.getService(IClientInfoService.class).getCpuInfo(servers);
 		Iterator<TargetServerInfo> serverIt = servers.iterator();
 		while(serverIt.hasNext()){
 			TargetServerInfo server = serverIt.next();

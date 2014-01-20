@@ -5,11 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.ws.rs.core.MultivaluedMap;
 
 import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.core.ctx.Page;
+import net.juniper.jmp.core.locator.SpringWebContextHelper;
 import net.juniper.jmp.monitor.mo.info.MemSummary;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.MemInfoRestService;
@@ -18,8 +18,6 @@ import net.juniper.jmp.monitor.sys.MonitorInfo;
 import net.juniper.jmp.tracer.info.MemInfo;
 
 public class MemInfoRestServiceImpl implements MemInfoRestService {
-	@Inject
-	private IClientInfoService service;
 	private static List<MemSummary> cacheList = new ArrayList<MemSummary>();
 	
 	static {
@@ -36,7 +34,7 @@ public class MemInfoRestServiceImpl implements MemInfoRestService {
 		List<TargetServerInfo> servers = getServers(oneIps);
 		if(servers == null || servers.size() == 0)
 			return null;
-		Map<TargetServerInfo, Object> reqResults = service.getMemInfo(servers);
+		Map<TargetServerInfo, Object> reqResults = SpringWebContextHelper.getService(IClientInfoService.class).getMemInfo(servers);
 		MemInfo memInfo = (MemInfo) reqResults.get(servers.get(0));
 		MemSummary maxList = cacheList.get(0);
 		MemSummary totalList = cacheList.get(1);

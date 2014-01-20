@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.inject.Inject;
 import javax.ws.rs.core.PathSegment;
 
 import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.core.ctx.Page;
+import net.juniper.jmp.core.locator.SpringWebContextHelper;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.ThreadInfoRestService;
 import net.juniper.jmp.monitor.services.IClientInfoService;
@@ -26,8 +26,7 @@ import net.juniper.jmp.tracer.dumper.info.ThreadInfoDump;
  */
 public class ThreadInfoRestServiceImpl extends AbstractMonitorInfoRestService implements ThreadInfoRestService{
 	private static final String THREADINFOS = "threadinfos";
-	@Inject
-	private IClientInfoService clientService;
+	private IClientInfoService clientService = SpringWebContextHelper.getService(IClientInfoService.class);
 	
 	@Override
 	public Page<ThreadInfoDump> getThreadInfos() {

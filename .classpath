@@ -13,14 +13,10 @@
 	<classpathentry kind="lib" path="lib/tomcat-embed-logging-juli.jar"/>
 	<classpathentry kind="lib" path="lib/tomcat-embed-logging-log4j.jar"/>
 	<classpathentry kind="lib" path="lib/tomcatstart.jar"/>
-	<classpathentry kind="lib" path="D:/Develop/projects/3rdParty/weld/cdi-api.jar" sourcepath="D:/Develop/projects/3rdParty/weld/cdi-api-sources.jar"/>
-	<classpathentry kind="lib" path="D:/Develop/projects/3rdParty/weld/weld-servlet-core.jar" sourcepath="D:/Develop/projects/3rdParty/weld/weld-servlet-core-sources.jar"/>
-	<classpathentry kind="lib" path="D:/Develop/projects/3rdParty/weld/weld-spi.jar" sourcepath="D:/Develop/projects/3rdParty/weld/weld-spi-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/3rdParty.aopalliance"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/net.juniper.jmp.wtfbase"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.resteasy.resteasy-jaxrs"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.resteasy.resteasy-cdi"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.apache.commons.logging"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.apache.commons.lang"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.apache.commons.io"/>
@@ -40,14 +36,12 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.slf4j"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.antlr"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/3rdParty.net.sf.json"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-javax.inject.api"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-com.google.guava"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-javax.interceptor.api"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.classfilewriter"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.weld.api"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.weld.core"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.weld.spi"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-ch.qos.cal10n"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.slf4j.ext"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-beans"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-context"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-web"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-core"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-asm"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-expression"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>

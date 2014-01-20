@@ -16,11 +16,14 @@ import net.juniper.jmp.persist.IJmpPersistenceManager;
 import net.juniper.jmp.persist.JmpPersistenceContext;
 import net.juniper.jmp.utils.IMoEntityConvertor;
 import net.juniper.jmp.utils.MoEntityConvertor;
+
+import org.springframework.stereotype.Service;
 /**
  * 
  * @author juntaod
  *
  */
+@Service(value="net.juniper.jmp.monitor.services.IServerInfoService")
 public class ServerInfoServiceImpl implements IServerInfoService {
 	private IMoEntityConvertor<TargetServerInfo, ServerEntity> convertor;
 	@Override
@@ -30,9 +33,8 @@ public class ServerInfoServiceImpl implements IServerInfoService {
 			allServers = new ConcurrentHashMap<String, TargetServerInfo>();
 			IJmpPersistenceManager em = JmpPersistenceContext.getInstance();
 			try{
-				Page<ServerEntity> results = em.findAll(ServerEntity.class, null, null);
-				Page<TargetServerInfo> serverPage = getConvertor().convertFromEntity2Mo(results, TargetServerInfo.class);
-				List<TargetServerInfo> serverList = serverPage.getRecords();
+				List<ServerEntity> results = em.findAll(ServerEntity.class, null);
+				List<TargetServerInfo> serverList = getConvertor().convertFromEntity2Mo(results, TargetServerInfo.class);
 				Iterator<TargetServerInfo> it = serverList.iterator();
 				while(it.hasNext()){
 					TargetServerInfo server = it.next();

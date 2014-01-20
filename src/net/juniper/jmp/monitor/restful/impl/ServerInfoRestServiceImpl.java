@@ -3,13 +3,14 @@ package net.juniper.jmp.monitor.restful.impl;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.ws.rs.core.MultivaluedMap;
 
 import net.juniper.jmp.core.ctx.ApiContext;
 import net.juniper.jmp.core.ctx.Page;
+import net.juniper.jmp.core.locator.SpringWebContextHelper;
 import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.restful.ServerInfoRestService;
+import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.monitor.services.IServerInfoService;
 import net.juniper.jmp.monitor.sys.MonitorInfo;
 
@@ -19,8 +20,7 @@ import net.juniper.jmp.monitor.sys.MonitorInfo;
  *
  */
 public class ServerInfoRestServiceImpl implements ServerInfoRestService {
-	@Inject
-	private IServerInfoService service;
+	private IServerInfoService service = SpringWebContextHelper.getService(IServerInfoService.class);
 	@Override
 	public Page<TargetServerInfo> getServerInfos() {
 		Page<TargetServerInfo> page = service.getServers(ApiContext.getPagingContext());

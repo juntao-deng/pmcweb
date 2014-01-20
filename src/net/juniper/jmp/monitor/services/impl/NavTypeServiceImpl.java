@@ -3,8 +3,6 @@ package net.juniper.jmp.monitor.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import net.juniper.jmp.core.ctx.Sort;
 import net.juniper.jmp.core.ctx.Sort.Order;
 import net.juniper.jmp.monitor.jpa.NavGroupEntity;
@@ -14,10 +12,10 @@ import net.juniper.jmp.monitor.mo.home.NavItemMO;
 import net.juniper.jmp.monitor.mo.home.NavType;
 import net.juniper.jmp.monitor.services.NavTypeService;
 import net.juniper.jmp.persist.IJmpPersistenceManager;
+import net.juniper.jmp.persist.JmpPersistenceContext;
 import net.juniper.jmp.utils.IMoEntityConvertor;
 import net.juniper.jmp.utils.MoEntityConvertor;
 public class NavTypeServiceImpl implements NavTypeService{
-    @Inject IJmpPersistenceManager em;
     private IMoEntityConvertor<NavItemMO, NavItemEntity> itemConvertor;
     private IMoEntityConvertor<NavGroupMO, NavGroupEntity> groupConvertor;
     
@@ -25,14 +23,26 @@ public class NavTypeServiceImpl implements NavTypeService{
 	public List<NavGroupEntity> getNavGroups(){
     	Order order = new Order("id");
     	Sort sort = new Sort(order);
-    	return (List<NavGroupEntity>) em.findAll(NavGroupEntity.class, sort);
+    	IJmpPersistenceManager em = JmpPersistenceContext.getInstance();
+    	try{
+    		return (List<NavGroupEntity>) em.findAll(NavGroupEntity.class, sort);
+    	}
+    	finally{
+    		em.release();
+    	}
     }
     
     @Override
 	public List<NavItemEntity> getNavItems() {
     	Order order = new Order("id");
     	Sort sort = new Sort(order);
-    	return (List<NavItemEntity>) em.findAll(NavItemEntity.class, sort);
+    	IJmpPersistenceManager em = JmpPersistenceContext.getInstance();
+    	try{
+    		return (List<NavItemEntity>) em.findAll(NavItemEntity.class, sort);
+    	}
+    	finally{
+    		em.release();
+    	}
     }
 
 	@Override

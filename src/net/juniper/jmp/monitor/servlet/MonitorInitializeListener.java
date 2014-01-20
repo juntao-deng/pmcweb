@@ -1,17 +1,18 @@
 package net.juniper.jmp.monitor.servlet;
 
-import javax.inject.Inject;
 import javax.servlet.ServletContextEvent;
 
+import net.juniper.jmp.core.locator.SpringWebContextHelper;
 import net.juniper.jmp.core.servlet.WtfContextListener;
 import net.juniper.jmp.monitor.services.IServerInfoService;
+
+import org.springframework.web.context.support.WebApplicationContextUtils;
 /**
  * 
  * @author juntaod
  *
  */
 public class MonitorInitializeListener extends WtfContextListener{
-	@Inject 
 	IServerInfoService serverInfoService;
 	
 	@Override
@@ -22,8 +23,9 @@ public class MonitorInitializeListener extends WtfContextListener{
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		super.contextInitialized(event);
+		SpringWebContextHelper.setSpringCtx(WebApplicationContextUtils.getWebApplicationContext(event.getServletContext()));
 		MonitorServletContextAware.getInstance().setContext(event.getServletContext());
-		serverInfoService.getAllServers();
+		SpringWebContextHelper.getService(IServerInfoService.class).getAllServers();
 		new Thread(new NodeStateThread()).start();
 		new Thread(new ServerStateThread()).start();
 	}
