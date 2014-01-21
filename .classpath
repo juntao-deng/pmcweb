@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="export"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/httpcore-4.3.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/httpclient-4.3.1.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/tracerexport.jar"/>
-	<classpathentry kind="lib" path="lib/derby.jar"/>
 	<classpathentry kind="lib" path="lib/tomcatstart.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/3rdParty.aopalliance"/>
@@ -29,7 +28,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.hibernate"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.slf4j"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.antlr"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/3rdParty.net.sf.json"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-javax.interceptor.api"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-beans"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-context"/>
@@ -38,12 +36,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-asm"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-expression"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.resteasy.resteasy-jackson-provider"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.resteasy.resteasy-jaxb-provider"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.jackson.jackson-core-asl"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.jackson.jackson-mapper-asl"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.jackson.jackson-xc"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.jettison"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.woodstox"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.codehaus.jackson.jackson-jaxrs"/>
 	<classpathentry kind="lib" path="lib/ecj-4.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/tomcat-dbcp.jar"/>
@@ -51,5 +46,10 @@
 	<classpathentry kind="lib" path="lib/tomcat-embed-jasper.jar"/>
 	<classpathentry kind="lib" path="lib/tomcat-embed-logging-juli.jar"/>
 	<classpathentry kind="lib" path="lib/tomcat-embed-logging-log4j.jar"/>
+	<classpathentry kind="lib" path="lib/derby.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.slf4j.impl"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.slf4j.jcl-over-slf4j"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.apache.log4j"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.logmanager"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>
