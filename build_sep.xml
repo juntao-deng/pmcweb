@@ -46,6 +46,7 @@
         <copy file="../../3rdParty/jboss/modules/org/jboss/resteasy/resteasy-jaxrs/main/resteasy-jaxrs-2.3.5.Final.jar" toDir="bin/lib"/>
         <copy file="../../3rdParty/jboss/modules/org/jboss/resteasy/resteasy-jaxrs/main/async-http-servlet-3.0-2.3.5.Final.jar" toDir="bin/lib"/>
         <copy file="../../3rdParty/jboss/modules/org/apache/commons/logging/main/commons-logging-1.1.jar" toDir="bin/lib"/>
+        <copy file="../../3rdParty/jboss/modules/org/apache/commons/lang/main/commons-lang-2.6.jar" toDir="bin/lib"/>
         <copy file="../../3rdParty/jboss/modules/javax/servlet/api/main/jboss-servlet-api_3.0_spec-1.0.2.Final.jar" toDir="bin/lib"/>
         <copy file="../../3rdParty/jboss/modules/javax/validation/api/main/validation-api-1.0.0.GA.jar" toDir="bin/lib"/>
         <copy file="../../3rdParty/jboss/modules/org/apache/commons/beanutils/main/commons-beanutils-1.8.3.jar" toDir="bin/lib"/>
@@ -54,21 +55,15 @@
         <copy file="../../3rdParty/jboss/modules/org/dom4j/main/dom4j-1.6.1.jar" toDir="bin/lib"/>
         <copy file="../../3rdParty/jboss/modules/javax/transaction/api/main/jboss-transaction-api_1.1_spec-1.0.1.Final.jar" toDir="bin/lib"/>
         <copy file="../../3rdParty/jboss/modules/org/scannotation/scannotation/main/scannotation-1.0.2.jar" toDir="bin/lib"/>
-        <copy file="../../3rdParty/jboss/modules/org/slf4j/main/slf4j-api-1.7.2.jar" toDir="bin/lib"/>
-        <copy file="../../3rdParty/jboss/modules/org/slf4j/jcl-over-slf4j/main/jcl-over-slf4j-1.7.2.jar" toDir="bin/lib"/>
-        <copy file="../../3rdParty/jboss/modules/org/slf4j/impl/main/slf4j-jboss-logmanager-1.0.2.GA.jar" toDir="bin/lib"/>
         <copy file="../../3rdParty/jboss/modules/org/antlr/main/antlr-2.7.7.jar" toDir="bin/lib"/>
         <copy file="../../3rdParty/jboss/modules/org/javassist/main/javassist-3.15.0-GA.jar" toDir="bin/lib"/>
-        <copy file="../../3rdParty/jboss/modules/org/jboss/logging/main/jboss-logging-3.1.2.GA.jar" toDir="bin/lib"/>
-        <copy file="../../3rdParty/jboss/modules/org/jboss/logmanager/main/jboss-logmanager-1.4.0.Final.jar" toDir="bin/lib"/>
-        <copy file="../../3rdParty/jboss/modules/org/slf4j/impl/main/slf4j-jboss-logmanager-1.0.2.GA.jar" toDir="bin/lib"/>
-        <copy file="../../3rdParty/jboss/modules/org/slf4j/jcl-over-slf4j/main/jcl-over-slf4j-1.7.2.jar" toDir="bin/lib"/>
         <copy file="../../3rdParty/jboss/modules/org/apache/log4j/main/log4j-1.2.16.jar" toDir="bin/lib"/>
         <copy file="../../3rdParty/jboss/modules/org/codehaus/jackson/jackson-jaxrs/main/jackson-jaxrs-1.9.9.jar" toDir="bin/lib"/>
         <copy file="../../3rdParty/jboss/modules/org/jboss/resteasy/resteasy-jackson-provider/main/resteasy-jackson-provider-2.3.5.Final.jar" toDir="bin/lib"/>
 		<copy file="../../3rdParty/jboss/modules/org/codehaus/jackson/jackson-core-asl/main/jackson-core-asl-1.9.9.jar" toDir="bin/lib"/>
 		<copy file="../../3rdParty/jboss/modules/org/codehaus/jackson/jackson-mapper-asl/main/jackson-mapper-asl-1.9.9.jar" toDir="bin/lib"/>
 		<copy file="../../3rdParty/jboss/modules/org/codehaus/jackson/jackson-xc/main/jackson-xc-1.9.9.jar" toDir="bin/lib"/>
+		<copy file="../../3rdParty/jboss/modules/javax/inject/api/main/javax.inject-1.jar" toDir="bin/lib"/>
 		<zip destfile="bin/pmcweb.tar.gz" basedir="bin">
 		</zip>
 		<delete dir="bin/classes"/>
@@ -144,14 +139,14 @@
 	    <path id="modules-org.scannotation.scannotation.userclasspath">
 	        <pathelement location="../../3rdParty/jboss/modules/org/scannotation/scannotation/main/scannotation-1.0.2.jar"/>
 	    </path>
-	    <path id="modules-org.slf4j.userclasspath">
-	        <pathelement location="../../3rdParty/jboss/modules/org/slf4j/main/slf4j-api-1.7.2.jar"/>
-	    </path>
 	    <path id="modules-org.antlr.userclasspath">
 	        <pathelement location="../../3rdParty/jboss/modules/org/antlr/main/antlr-2.7.7.jar"/>
 	    </path>
-	     <path id="modules-org.javassist.userclasspath">
+	    <path id="modules-org.javassist.userclasspath">
 	        <pathelement location="../../3rdParty/jboss/modules/org/javassist/main/javassist-3.15.0-GA.jar"/>
+	    </path>
+	    <path id="modules-org.apache.log4j.userclasspath">
+	        <pathelement location="../../3rdParty/jboss/modules/org/apache/log4j/main/log4j-1.2.16.jar"/>
 	    </path>
 	    <path id="pmcweb.classpath">
 	        <pathelement location="web/WEB-INF/classes"/>
@@ -178,9 +173,9 @@
 	        <path refid="modules-org.dom4j.userclasspath"/>
 	        <path refid="modules-javax.transaction.api.userclasspath"/>
 	        <path refid="modules-org.scannotation.scannotation.userclasspath"/>
-	        <path refid="modules-org.slf4j.userclasspath"/>
 	        <path refid="modules-org.antlr.userclasspath"/>
 	        <path refid="modules-org.javassist.userclasspath"/>
+	        <path refid="modules-org.apache.log4j.userclasspath"/>
 	        <pathelement location="lib/ecj-4.3.1.jar"/>
 	        <pathelement location="lib/tomcat-dbcp.jar"/>
 	        <pathelement location="lib/tomcat-embed-core.jar"/>

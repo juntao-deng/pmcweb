@@ -18,7 +18,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.apache.commons.beanutils"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-javax.persistence.api"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-javax.ws.rs.api"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.logging"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.dom4j"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-javax.transaction.api"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.scannotation.scannotation"/>
@@ -26,7 +25,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.hibernate.validator"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.javassist"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.hibernate"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.slf4j"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.antlr"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-javax.interceptor.api"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springframework-beans"/>
@@ -47,9 +45,7 @@
 	<classpathentry kind="lib" path="lib/tomcat-embed-logging-juli.jar"/>
 	<classpathentry kind="lib" path="lib/tomcat-embed-logging-log4j.jar"/>
 	<classpathentry kind="lib" path="lib/derby.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.slf4j.impl"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.slf4j.jcl-over-slf4j"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.apache.log4j"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-org.jboss.logmanager"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/modules-javax.inject.api"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>

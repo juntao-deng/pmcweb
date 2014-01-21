@@ -22,8 +22,7 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 /**
  * Http Proxy for remote calling, using Java Dynamic proxy will be much better
  * @author juntaod
@@ -31,7 +30,7 @@ import org.slf4j.LoggerFactory;
  */
 public class HttpProxy {
 	private static final int DEFAULT_TIMEOUT = 40000; //40s
-	private Logger logger = LoggerFactory.getLogger(HttpProxy.class);
+	private Logger logger = Logger.getLogger(HttpProxy.class);
 	private static Map<String, HttpProxy> proxyMap = new HashMap<String, HttpProxy>();
 	private TargetServerInfo serverInfo;
 	private CloseableHttpClient httpclient;

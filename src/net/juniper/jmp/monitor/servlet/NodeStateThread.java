@@ -7,8 +7,7 @@ import net.juniper.jmp.monitor.mo.info.TargetServerInfo;
 import net.juniper.jmp.monitor.services.IClientInfoService;
 import net.juniper.jmp.monitor.services.IServerInfoService;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * Detecting if the node is still running every 10 seconds. And update the cached server state
@@ -16,7 +15,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class NodeStateThread implements Runnable {
-	private Logger logger = LoggerFactory.getLogger(NodeStateThread.class);
+	private Logger logger = Logger.getLogger(NodeStateThread.class);
 	@Override
 	public void run() {
 		IServerInfoService serverService = SpringWebContextHelper.getService(IServerInfoService.class);

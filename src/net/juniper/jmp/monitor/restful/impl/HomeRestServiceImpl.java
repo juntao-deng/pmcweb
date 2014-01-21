@@ -9,12 +9,11 @@ import net.juniper.jmp.monitor.restful.HomeRestService;
 import net.juniper.jmp.monitor.services.NavTypeService;
 import net.juniper.jmp.monitor.sys.SessionBean;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 @Service(value="net.juniper.jmp.monitor.restful.HomeRestService")
 public class HomeRestServiceImpl implements HomeRestService{
-   private Logger logger = LoggerFactory.getLogger(HomeRestServiceImpl.class);
+   private Logger logger = Logger.getLogger(HomeRestServiceImpl.class);
    
    @Override
    public HomeInfo getHomeInfo() {

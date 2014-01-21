@@ -15,15 +15,14 @@ import net.juniper.jmp.tracer.dumper.info.AbstractDumpObject;
 import net.juniper.jmp.tracer.dumper.info.StageInfoBaseDump;
 import net.juniper.jmp.tracer.dumper.info.ThreadInfoDump;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 /**
  * 
  * @author juntaod
  *
  */
 public abstract class AbstractMonitorInfoRestService {
-	private Logger logger = LoggerFactory.getLogger(AbstractMonitorInfoRestService.class);
+	private Logger logger = Logger.getLogger(AbstractMonitorInfoRestService.class);
 	private static final String ASYNCIDTHREADS = "ASYNCIDTHREADS";
 	private static final String CALLIDTHREADS = "CALLIDTHREADS";
 	private static final String ATTACHTHREADS = "ATTACHTHREADS";
