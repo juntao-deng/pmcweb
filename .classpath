@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="export"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/httpcore-4.3.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/httpclient-4.3.1.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/tracerexport.jar"/>
